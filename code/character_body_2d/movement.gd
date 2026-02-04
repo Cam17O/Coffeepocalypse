@@ -26,17 +26,29 @@
 	
 extends CharacterBody2D
 
-@export var speed = 300.0 # Vitesse du joueur
+@export var speed = 200.0
+
+@onready var anim_player = $AnimationPlayer
+@onready var sprite = $Sprite2D
 
 func _physics_process(_delta):
-	# On récupère la direction via les touches configurées
-	var direction = Input.get_vector("gauche", "droite", "haut", "bas")
+	var direction = Input.get_vector("left", "right", "up", "down")
+	velocity = direction * speed
 	
-	if direction:
-		velocity = direction * speed
-	else:
-		# On freine progressivement (l'effet "glisse" un peu caféiné)
-		velocity = velocity.move_toward(Vector2.ZERO, speed)
-
-	# move_and_slide gère automatiquement les collisions et le mouvement
 	move_and_slide()
+
+	if direction != Vector2.ZERO:
+		
+		if abs(direction.x) > abs(direction.y):
+			if direction.x > 0:
+				anim_player.play("walk_right")
+			else:
+				anim_player.play("walk_left")
+		else:
+			if direction.y > 0:
+				anim_player.play("walk_down")
+			else:
+				anim_player.play("walk_up")
+				
+	else:
+		anim_player.stop()

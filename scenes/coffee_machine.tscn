@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dxoroxitviysr"]
+
+[ext_resource type="Texture2D" uid="uid://bupkskkc52kpi" path="res://Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="1_vqwbw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vqwbw"]
+size = Vector2(18, 14)
+
+[node name="coffeeMachine" type="Node2D" unique_id=1348650551]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1662373859]
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=1975208622]
+texture = ExtResource("1_vqwbw")
+hframes = 5
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1790571500]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_vqwbw")
