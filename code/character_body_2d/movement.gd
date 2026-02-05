@@ -52,3 +52,4 @@ func _physics_process(_delta):
 				
 	else:
 		anim_player.stop()
+		anim_player.play("RESET")

@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cdivdf1inna87" path="res://Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Spritesheet.png" id="2_h1h2p"]
 [ext_resource type="Texture2D" uid="uid://lrgwi63ujfq2" path="res://Sprout Lands - Sprites - Basic pack/Tilesets/Hills.png" id="2_r1038"]
 [ext_resource type="Texture2D" uid="uid://bupkskkc52kpi" path="res://Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="3_30rmc"]
-[ext_resource type="PackedScene" uid="uid://dxoroxitviysr" path="res://scenes/coffee_machine.tscn" id="6_n0v8c"]
+[ext_resource type="PackedScene" path="res://scenes/coffee_machine.tscn" id="6_n0v8c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_74lek"]
 texture = ExtResource("1_vrwrh")
@@ -215,7 +215,6 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_h1h2p"]
 resource_name = "walk_down"
-length = 1.6666666
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -224,15 +223,14 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.8, 1.2333333),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [0, 2, 0, 3]
+"values": [2, 3]
 }
 
 [sub_resource type="Animation" id="Animation_30rmc"]
 resource_name = "walk_left"
-length = 1.2
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -241,15 +239,14 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [8, 10, 11]
+"values": [10, 11]
 }
 
 [sub_resource type="Animation" id="Animation_n0v8c"]
 resource_name = "walk_right"
-length = 1.2
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -258,15 +255,14 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [12, 14, 15]
+"values": [14, 15]
 }
 
 [sub_resource type="Animation" id="Animation_yyfh7"]
 resource_name = "walk_up"
-length = 1.2
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -275,10 +271,10 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [4, 6, 7]
+"values": [6, 7]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_50p2s"]
