@@ -18,12 +18,12 @@ func _input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 
 # Action for Left Click
 func take_coffee(amount: int) -> void:
-	if coffee_inventory >= amount:
-		coffee_inventory -= amount
-		print("Took ", amount, " coffee. Remaining in storage: ", coffee_inventory)
-		# Add logic here to give coffee to the player's global inventory
-	else:
-		print("Not enough coffee left in storage!")
+	# On vérifie si le joueur a de la place
+	if Global.raw_coffee_carried < Global.max_coffee_capacity:
+		if coffee_inventory >= amount:
+			coffee_inventory -= amount
+			Global.raw_coffee_carried += amount
+			print("Player now carries: ", Global.raw_coffee_carried)
 
 # Action for Right Click (The "Modal" info)
 func show_storage_details() -> void:
@@ -45,7 +45,3 @@ func _on_interaction_area_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player") or body.name == "CharacterBody2D":
 		is_player_nearby = false
 		print("Player left storage")
-
-
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	pass # Replace with function body.

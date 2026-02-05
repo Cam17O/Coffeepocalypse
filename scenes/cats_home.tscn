@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://ggr0keyq2v4p"]
+
+[ext_resource type="Script" uid="uid://nrcq1spo08e5" path="res://code/cats_home/cats_home.gd" id="1_0rfwf"]
+[ext_resource type="Texture2D" uid="uid://caobhn7vtajic" path="res://Sprout Lands - Sprites - Basic pack/Objects/Free_Chicken_House.png" id="1_yk6af"]
+[ext_resource type="PackedScene" uid="uid://cviegt5njhfut" path="res://scenes/cats.tscn" id="2_3lpbd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0rfwf"]
+size = Vector2(38, 49)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3lpbd"]
+radius = 55.00909
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=894526577]
+script = ExtResource("1_0rfwf")
+cat_scene = ExtResource("2_3lpbd")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1793903381]
+texture = ExtResource("1_yk6af")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=337622582]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_0rfwf")
+disabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1776467992]
+
+[node name="Area2D" type="Area2D" parent="." unique_id=615805866]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=943143147]
+shape = SubResource("CircleShape2D_3lpbd")
+
+[node name="Timer" type="Timer" parent="." unique_id=1550748316]

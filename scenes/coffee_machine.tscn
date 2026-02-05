@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c7x4f6p143l7"]
 
 [ext_resource type="Texture2D" uid="uid://bupkskkc52kpi" path="res://Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="1_vqwbw"]
-[ext_resource type="Script" uid="uid://dxmcsrcn7b2p1" path="res://code/coffee_machine/static_body_2d.gd" id="1_y23ww"]
+[ext_resource type="Script" uid="uid://dxmcsrcn7b2p1" path="res://code/coffee_machine/coffee_machine.gd" id="1_y23ww"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vqwbw"]
 size = Vector2(31, 24)
@@ -9,29 +9,27 @@ size = Vector2(31, 24)
 [sub_resource type="CircleShape2D" id="CircleShape2D_y23ww"]
 radius = 52.086468
 
-[node name="coffeeMachine0" type="Node2D" unique_id=1348650551]
-
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1662373859]
+[node name="StaticBody2D" type="StaticBody2D" unique_id=1662373859 groups=["machines"]]
 input_pickable = true
 script = ExtResource("1_y23ww")
 
-[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=1975208622]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1975208622]
 position = Vector2(5.722046e-06, -1)
 scale = Vector2(2.0833333, 1.8125)
 texture = ExtResource("1_vqwbw")
 hframes = 5
 vframes = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1790571500]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790571500]
 position = Vector2(0.5, 1)
 shape = SubResource("RectangleShape2D_vqwbw")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="StaticBody2D" unique_id=158069809]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=158069809]
 
-[node name="Area2D" type="Area2D" parent="StaticBody2D" unique_id=374760238]
+[node name="Area2D" type="Area2D" parent="." unique_id=374760238]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/Area2D" unique_id=851076403]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=851076403]
 shape = SubResource("CircleShape2D_y23ww")
 
-[connection signal="body_entered" from="StaticBody2D/Area2D" to="StaticBody2D" method="_on_interaction_area_body_entered"]
-[connection signal="body_exited" from="StaticBody2D/Area2D" to="StaticBody2D" method="_on_interaction_area_body_exited"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_interaction_area_body_exited"]

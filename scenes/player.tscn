@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://cmkseogqsntsa"]
+
+[ext_resource type="Script" uid="uid://bjsjjaee6hid8" path="res://code/player/movement.gd" id="1_g2els"]
+[ext_resource type="Texture2D" uid="uid://cdivdf1inna87" path="res://Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Spritesheet.png" id="2_qhqgy"]
+
+[sub_resource type="Animation" id="Animation_50p2s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_h1h2p"]
+resource_name = "walk_down"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_30rmc"]
+resource_name = "walk_left"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [10, 11]
+}
+
+[sub_resource type="Animation" id="Animation_n0v8c"]
+resource_name = "walk_right"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [14, 15]
+}
+
+[sub_resource type="Animation" id="Animation_yyfh7"]
+resource_name = "walk_up"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [6, 7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_50p2s"]
+_data = {
+&"RESET": SubResource("Animation_50p2s"),
+&"walk_down": SubResource("Animation_h1h2p"),
+&"walk_left": SubResource("Animation_30rmc"),
+&"walk_right": SubResource("Animation_n0v8c"),
+&"walk_up": SubResource("Animation_yyfh7")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h1h2p"]
+size = Vector2(12, 8)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n0v8c"]
+radius = 59.0
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=866001324]
+script = ExtResource("1_g2els")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=519753124]
+z_index = 100
+texture = ExtResource("2_qhqgy")
+hframes = 4
+vframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1482319673]
+libraries/ = SubResource("AnimationLibrary_50p2s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1819435485]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_h1h2p")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1315113170]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2115329378]
+shape = SubResource("CircleShape2D_n0v8c")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1648512606]
+zoom = Vector2(2, 2)

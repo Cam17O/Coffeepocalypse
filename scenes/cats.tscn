@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://cviegt5njhfut"]
+
+[ext_resource type="Script" uid="uid://yj2skwsbsw8g" path="res://code/cats/cats.gd" id="1_8onlj"]
+[ext_resource type="Texture2D" uid="uid://cdivdf1inna87" path="res://Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Spritesheet.png" id="1_a5agg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8onlj"]
+size = Vector2(14, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u66c4"]
+radius = 25.0
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=2139655468]
+script = ExtResource("1_8onlj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=422248988]
+position = Vector2(30, 23)
+texture = ExtResource("1_a5agg")
+hframes = 4
+vframes = 4
+frame = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=600175675]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1971881906]
+position = Vector2(30, 23)
+shape = SubResource("RectangleShape2D_8onlj")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=955618885]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=505524021]
+position = Vector2(30, 23)
+shape = SubResource("CircleShape2D_u66c4")
