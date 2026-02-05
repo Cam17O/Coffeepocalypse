@@ -324,4 +324,4 @@ shape = SubResource("CircleShape2D_n0v8c")
 zoom = Vector2(2, 2)
 
 [node name="coffeeMachine" parent="." unique_id=1348650551 instance=ExtResource("6_n0v8c")]
-position = Vector2(-1, -96)
+position = Vector2(0, -97)
