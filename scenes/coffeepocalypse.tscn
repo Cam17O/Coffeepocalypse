@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cdivdf1inna87" path="res://Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Spritesheet.png" id="2_h1h2p"]
 [ext_resource type="Texture2D" uid="uid://lrgwi63ujfq2" path="res://Sprout Lands - Sprites - Basic pack/Tilesets/Hills.png" id="2_r1038"]
 [ext_resource type="Texture2D" uid="uid://bupkskkc52kpi" path="res://Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="3_30rmc"]
-[ext_resource type="PackedScene" path="res://scenes/coffee_machine.tscn" id="6_n0v8c"]
+[ext_resource type="PackedScene" uid="uid://c7x4f6p143l7" path="res://scenes/coffee_machine.tscn" id="6_n0v8c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_74lek"]
 texture = ExtResource("1_vrwrh")
@@ -289,6 +289,9 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h1h2p"]
 size = Vector2(12, 8)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_n0v8c"]
+radius = 59.0
+
 [node name="coffeepocalypse" type="Node2D" unique_id=355175693]
 
 [node name="TileMapLayer0" type="TileMapLayer" parent="." unique_id=2061117263]
@@ -308,14 +311,17 @@ vframes = 4
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CharacterBody2D" unique_id=1364031634]
 libraries/ = SubResource("AnimationLibrary_50p2s")
 
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=317757076]
-zoom = Vector2(2, 2)
-
-[node name="Area2D" type="Area2D" parent="CharacterBody2D" unique_id=657529987]
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1590610751]
 position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_h1h2p")
 
+[node name="Area2D" type="Area2D" parent="CharacterBody2D" unique_id=657529987]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D" unique_id=1561627649]
+shape = SubResource("CircleShape2D_n0v8c")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=317757076]
+zoom = Vector2(2, 2)
+
 [node name="coffeeMachine" parent="." unique_id=1348650551 instance=ExtResource("6_n0v8c")]
-position = Vector2(0, -81)
+position = Vector2(-1, -96)
