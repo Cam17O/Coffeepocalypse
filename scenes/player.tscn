@@ -95,9 +95,9 @@ _data = {
 size = Vector2(12, 8)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n0v8c"]
-radius = 59.0
+radius = 10.198039
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=866001324]
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=866001324 groups=["player"]]
 script = ExtResource("1_g2els")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=519753124]
@@ -120,3 +120,6 @@ shape = SubResource("CircleShape2D_n0v8c")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1648512606]
 zoom = Vector2(2, 2)
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="." unique_id=1030691095]
+radius = 10.0

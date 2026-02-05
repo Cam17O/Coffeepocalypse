@@ -8,7 +8,7 @@
 size = Vector2(38, 49)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3lpbd"]
-radius = 55.00909
+radius = 31.144823
 
 [node name="StaticBody2D" type="StaticBody2D" unique_id=894526577]
 script = ExtResource("1_0rfwf")
@@ -20,7 +20,6 @@ texture = ExtResource("1_yk6af")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=337622582]
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_0rfwf")
-disabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1776467992]
 

@@ -1,40 +1,47 @@
 extends Node2D
 
 @export var cat_scene: PackedScene
-@onready var spawn_timer = $Timer # Assure-toi que le nom correspond dans l'arbre
+@export var min_spawn_interval: float = 2.5
+@export var max_spawn_interval: float = 6.0
+@export var min_spawn_chance: float = 0.2
+@export var max_spawn_chance: float = 0.9
+@export var max_cats_alive: int = 6
+@export var spawn_radius: float = 26.0
+
+@onready var spawn_timer = $Timer
 
 func _ready():
-	if spawn_timer:
-		spawn_timer.timeout.connect(_on_spawn_timer_timeout)
-		adjust_spawn_rate()
+	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
+	_reset_timer()
 
 func _on_spawn_timer_timeout():
-	var spawn_chance = Global.global_satisfaction / 100.0
-	if randf() < spawn_chance:
-		spawn_cat()
-	adjust_spawn_rate()
+	_reset_timer()
+	if not cat_scene:
+		return
+	if _count_cats() >= max_cats_alive:
+		return
 
-func spawn_cat():
-	if cat_scene == null: 
-		print("Oubli de la scène dans l'inspecteur !")
+	var satisfaction_ratio = clamp(Global.global_satisfaction / 100.0, 0.0, 1.0)
+	var chance = lerp(min_spawn_chance, max_spawn_chance, satisfaction_ratio)
+	if randf() > chance:
 		return
 
 	var new_cat = cat_scene.instantiate()
-	
-	# On l'ajoute à la scène AVANT de modifier ses variables
+	new_cat.add_to_group("cats")
 	get_tree().current_scene.add_child(new_cat)
-	
-	# On vérifie si c'est bien notre chat qui a la variable home_position
-	if "home_position" in new_cat:
-		new_cat.global_position = global_position
-		new_cat.home_position = global_position
-	else:
-		# Si on arrive ici, c'est que le script n'est pas attaché 
-		# au nœud racine de ta scène CatCustomer
-		print("Erreur : Le chat instancié n'a pas de script avec 'home_position'")
+	new_cat.global_position = _get_spawn_position()
 
-func adjust_spawn_rate():
-	var base_time = 10.0
-	var satisfaction_factor = clamp(100.0 / (Global.global_satisfaction + 1.0), 1.0, 10.0)
-	spawn_timer.wait_time = base_time * satisfaction_factor
+func _reset_timer():
+	spawn_timer.wait_time = randf_range(min_spawn_interval, max_spawn_interval)
 	spawn_timer.start()
+
+func _count_cats() -> int:
+	return get_tree().get_nodes_in_group("cats").size()
+
+func _get_spawn_position() -> Vector2:
+	var offset = Vector2(randf_range(-spawn_radius, spawn_radius), randf_range(-spawn_radius, spawn_radius))
+	var desired = global_position + offset
+	var nav_map = get_world_2d().navigation_map
+	if nav_map != RID():
+		return NavigationServer2D.map_get_closest_point(nav_map, desired)
+	return desired

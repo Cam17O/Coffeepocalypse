@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://35dmdbnkt14"]
 
 [ext_resource type="Texture2D" uid="uid://bupkskkc52kpi" path="res://Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="1_8l6qr"]
-[ext_resource type="Script" uid="uid://cyk7cu5nxv12e" path="res://code/storage/static_body_2d.gd" id="1_ky4oa"]
+[ext_resource type="Script" uid="uid://cyk7cu5nxv12e" path="res://code/storage/storage.gd" id="1_ky4oa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8l6qr"]
-size = Vector2(17, 21)
+size = Vector2(17, 20)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ky4oa"]
-radius = 46.0
+radius = 13.0
 
-[node name="StaticBody2D" type="StaticBody2D" unique_id=617544130]
+[node name="StaticBody2D" type="StaticBody2D" unique_id=617544130 groups=["storages"]]
 input_pickable = true
 script = ExtResource("1_ky4oa")
 
@@ -20,7 +20,7 @@ vframes = 2
 frame = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=39162309]
-position = Vector2(-0.5, -2.5)
+position = Vector2(0, -2)
 shape = SubResource("RectangleShape2D_8l6qr")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=658296973]
@@ -28,6 +28,7 @@ shape = SubResource("RectangleShape2D_8l6qr")
 [node name="Area2D" type="Area2D" parent="." unique_id=1459880469]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1161312896]
+position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_ky4oa")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_interaction_area_body_entered"]

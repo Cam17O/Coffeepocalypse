@@ -7,7 +7,7 @@
 size = Vector2(31, 24)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_y23ww"]
-radius = 52.086468
+radius = 21.023796
 
 [node name="StaticBody2D" type="StaticBody2D" unique_id=1662373859 groups=["machines"]]
 input_pickable = true
