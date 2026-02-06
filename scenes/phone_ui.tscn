@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://btpp86brwpmj4"]
+
+[ext_resource type="Script" uid="uid://b8a3p1r1v5c7y" path="res://code/ui/phone_ui.gd" id="1_g7ywp"]
+
+[node name="PhoneUI" type="CanvasLayer" unique_id=2023842308]
+process_mode = 3
+script = ExtResource("1_g7ywp")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer2D" parent="." unique_id=656405019]
+
+[node name="MainControl" type="Control" parent="." unique_id=837753085]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PhoneBody" type="Panel" parent="MainControl" unique_id=1038961277]
+custom_minimum_size = Vector2(400, 600)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ContentBox" type="HBoxContainer" parent="MainControl/PhoneBody" unique_id=518428567]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LeftColumn" type="VBoxContainer" parent="MainControl/PhoneBody/ContentBox" unique_id=1043368667]
+layout_mode = 2
+
+[node name="TabsContainer" type="HBoxContainer" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=802111542]
+layout_mode = 2
+
+[node name="BtnMachines" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=682231265]
+layout_mode = 2
+
+[node name="BtnStorages" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=2088579766]
+layout_mode = 2
+
+[node name="BtnSpawners" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=2139570953]
+layout_mode = 2
+
+[node name="BtnCats" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=986023217]
+layout_mode = 2
+
+[node name="BtnPlayer" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=351256429]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=621522784]
+layout_mode = 2
+
+[node name="ItemList" type="ItemList" parent="MainControl/PhoneBody/ContentBox/LeftColumn/ScrollContainer" unique_id=47703762]
+layout_mode = 2
+
+[node name="RightColumn" type="VBoxContainer" parent="MainControl/PhoneBody/ContentBox" unique_id=701157613]
+layout_mode = 2
+
+[node name="DetailPanel" type="PanelContainer" parent="MainControl/PhoneBody/ContentBox/RightColumn" unique_id=1162381527]
+layout_mode = 2
+
+[node name="VBoxDetails" type="VBoxContainer" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel" unique_id=1225330596]
+layout_mode = 2
+
+[node name="Labels" type="RichTextLabel" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=134941767]
+layout_mode = 2
+
+[node name="FillButton" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=538886881]
+layout_mode = 2
+
+[node name="UpgradeButton" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=506207772]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="MainControl/PhoneBody" unique_id=1324928819]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

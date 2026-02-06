@@ -10,7 +10,7 @@ size = Vector2(38, 49)
 [sub_resource type="CircleShape2D" id="CircleShape2D_3lpbd"]
 radius = 31.144823
 
-[node name="StaticBody2D" type="StaticBody2D" unique_id=894526577]
+[node name="StaticBody2D" type="StaticBody2D" unique_id=894526577 groups=["spawners"]]
 script = ExtResource("1_0rfwf")
 cat_scene = ExtResource("2_3lpbd")
 

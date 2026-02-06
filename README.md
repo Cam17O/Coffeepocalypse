@@ -71,3 +71,5 @@
         - reset avec plus de robot/machine dès le début
         - agrandissement / autre bonus pour les barres de satisfaction
         - 
+
+Souhaites-tu que j'ajoute un système visuel (comme une petite étiquette ou un changement de couleur) sur la machine dans le jeu pour qu'on voie son niveau sans ouvrir le téléphone ?

@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://35dmdbnkt14" path="res://scenes/stockage.tscn" id="6_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://ggr0keyq2v4p" path="res://scenes/cats_home.tscn" id="7_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://cviegt5njhfut" path="res://scenes/cats.tscn" id="7_tipki"]
-[ext_resource type="PackedScene" uid="uid://btpp86brwpmj4" path="res://scenes/phone_ui.tscn" id="9_choun"]
+[ext_resource type="Script" uid="uid://b8a3p1r1v5c7y" path="res://code/ui/phone_ui.gd" id="8_phoneui"]
 [ext_resource type="PackedScene" uid="uid://dmol87a0ad8ov" path="res://scenes/progress_bar.tscn" id="10_choun"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_tipki"]
@@ -233,6 +233,90 @@ position = Vector2(122, -102)
 [node name="coffeeMachine" parent="NavigationRegion2D" unique_id=1348650551 instance=ExtResource("5_choun")]
 position = Vector2(0, -97)
 
-[node name="PhoneUI" parent="." unique_id=2023842308 instance=ExtResource("9_choun")]
+[node name="UI" type="CanvasLayer" parent="." unique_id=2008426773]
+
+[node name="PhoneUI" type="Control" parent="UI" unique_id=682114030]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_phoneui")
+
+[node name="Panel" type="Panel" parent="UI/PhoneUI" unique_id=1493578820]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 61.0
+offset_top = -223.0
+offset_right = 401.0
+offset_bottom = 97.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PhoneUI/Panel" unique_id=1661501615]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+
+[node name="TitleLabel" type="Label" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=30925208]
+layout_mode = 2
+text = "Telephone"
+
+[node name="MoneyLabel" type="Label" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=771336037]
+layout_mode = 2
+text = "Argent: 0"
+
+[node name="SatisfactionLabel" type="Label" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=1660504051]
+layout_mode = 2
+text = "Satisfaction: 100"
+
+[node name="RawCoffeeLabel" type="Label" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=308445059]
+layout_mode = 2
+text = "Cafe brut: 0 / 0"
+
+[node name="StorageLabel" type="Label" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=1362252851]
+layout_mode = 2
+text = "Stock zone: 0"
+
+[node name="FishingLabel" type="Label" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=1957466597]
+layout_mode = 2
+text = "Peche lvl: 1"
+
+[node name="UpgradeMachineButton" type="Button" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=947465164]
+layout_mode = 2
+text = "Ameliorer machine"
+
+[node name="UpgradeStorageButton" type="Button" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=823703771]
+layout_mode = 2
+text = "Ameliorer stockage"
+
+[node name="UpgradeFishingButton" type="Button" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=1223116330]
+layout_mode = 2
+text = "Ameliorer peche"
+
+[node name="BuyRawCoffeeButton" type="Button" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=1536435833]
+layout_mode = 2
+text = "Acheter cafe brut"
+
+[node name="ExportSaveButton" type="Button" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=351779825]
+layout_mode = 2
+text = "Exporter sauvegarde"
+
+[node name="ImportSaveButton" type="Button" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=1292229910]
+layout_mode = 2
+text = "Importer sauvegarde"
+
+[node name="CloseButton" type="Button" parent="UI/PhoneUI/Panel/VBoxContainer" unique_id=1221384713]
+layout_mode = 2
+text = "Fermer"
 
 [node name="ProgressBar" parent="." unique_id=631009078 instance=ExtResource("10_choun")]

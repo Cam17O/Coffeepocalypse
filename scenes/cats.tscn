@@ -9,7 +9,7 @@ size = Vector2(14, 16)
 [sub_resource type="CircleShape2D" id="CircleShape2D_u66c4"]
 radius = 11.0
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=2139655468]
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=2139655468 groups=["cats"]]
 script = ExtResource("1_8onlj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=422248988]

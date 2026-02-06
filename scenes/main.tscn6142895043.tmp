@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://35dmdbnkt14" path="res://scenes/stockage.tscn" id="6_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://ggr0keyq2v4p" path="res://scenes/cats_home.tscn" id="7_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://cviegt5njhfut" path="res://scenes/cats.tscn" id="7_tipki"]
-[ext_resource type="PackedScene" uid="uid://btpp86brwpmj4" path="res://scenes/phone_ui.tscn" id="9_choun"]
+[ext_resource type="Script" uid="uid://b8a3p1r1v5c7y" path="res://code/ui/phone_ui.gd" id="8_phoneui"]
 [ext_resource type="PackedScene" uid="uid://dmol87a0ad8ov" path="res://scenes/progress_bar.tscn" id="10_choun"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_tipki"]
@@ -233,6 +233,81 @@ position = Vector2(122, -102)
 [node name="coffeeMachine" parent="NavigationRegion2D" unique_id=1348650551 instance=ExtResource("5_choun")]
 position = Vector2(0, -97)
 
-[node name="PhoneUI" parent="." unique_id=2023842308 instance=ExtResource("9_choun")]
+[node name="PhoneUI" type="Control" parent="NavigationRegion2D" unique_id=1451160058]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+offset_left = -124.0
+offset_top = 48.0
+offset_right = -84.0
+offset_bottom = 88.0
+script = ExtResource("8_phoneui")
+
+[node name="Panel" type="Panel" parent="NavigationRegion2D/PhoneUI" unique_id=538915565]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NavigationRegion2D/PhoneUI/Panel" unique_id=1794061330]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ItemList" type="ItemList" parent="NavigationRegion2D/PhoneUI/Panel/ScrollContainer" unique_id=1640865928]
+layout_mode = 2
+
+[node name="TabsContainer" type="HBoxContainer" parent="NavigationRegion2D/PhoneUI/Panel" unique_id=1392185680]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BtnMachines" type="Button" parent="NavigationRegion2D/PhoneUI/Panel/TabsContainer" unique_id=128115833]
+layout_mode = 2
+
+[node name="BtnCats" type="Button" parent="NavigationRegion2D/PhoneUI/Panel/TabsContainer" unique_id=649292682]
+layout_mode = 2
+
+[node name="BtnPlayer" type="Button" parent="NavigationRegion2D/PhoneUI/Panel/TabsContainer" unique_id=499917392]
+layout_mode = 2
+
+[node name="BtnSpawner" type="Button" parent="NavigationRegion2D/PhoneUI/Panel/TabsContainer" unique_id=978597191]
+layout_mode = 2
+
+[node name="BtnStorage" type="Button" parent="NavigationRegion2D/PhoneUI/Panel/TabsContainer" unique_id=1086859256]
+layout_mode = 2
+
+[node name="DetailPanel" type="Panel" parent="NavigationRegion2D/PhoneUI/Panel" unique_id=1348050076]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Labels" type="Label" parent="NavigationRegion2D/PhoneUI/Panel/DetailPanel" unique_id=778630023]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="FillButton" type="Button" parent="NavigationRegion2D/PhoneUI/Panel/DetailPanel" unique_id=421183613]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="UpgradeButton" type="Button" parent="NavigationRegion2D/PhoneUI/Panel/DetailPanel" unique_id=829772578]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="KickButton" type="Button" parent="NavigationRegion2D/PhoneUI/Panel/DetailPanel" unique_id=437884887]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="InfoLabel" type="Label" parent="NavigationRegion2D/PhoneUI" unique_id=1797822002]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+horizontal_alignment = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer2D" parent="NavigationRegion2D/PhoneUI" unique_id=513309078]
 
 [node name="ProgressBar" parent="." unique_id=631009078 instance=ExtResource("10_choun")]

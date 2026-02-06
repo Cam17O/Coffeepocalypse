@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dmol87a0ad8ov"]
+
+[ext_resource type="Script" uid="uid://dlkgobdgjfjad" path="res://code/ui/progress_bar.gd" id="1_vt3ux"]
+
+[node name="ProgressBar" type="ProgressBar" unique_id=631009078]
+offset_right = 4.0
+offset_bottom = 27.0
+script = ExtResource("1_vt3ux")
