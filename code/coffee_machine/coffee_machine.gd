@@ -16,6 +16,7 @@ extends StaticBody2D
 
 var is_busy: bool = false
 var is_player_nearby: bool = false
+var waiting_count: int = 0
 
 var _base_brewing_time: float
 var _base_max_stock: int
@@ -44,6 +45,12 @@ func apply_upgrade_level(level: int):
 	current_coffee_stock = clamp(current_coffee_stock, 0, max_coffee_stock)
 	print("[Machine] Upgrade", name, "lvl", level, "stock", max_coffee_stock, "brew", brewing_time)
 
+func register_waiter():
+	waiting_count += 1
+
+func unregister_waiter():
+	waiting_count = max(0, waiting_count - 1)
+
 func start_brewing(customer: Node2D) -> bool:
 	if is_busy:
 		return false
@@ -66,7 +73,7 @@ func start_brewing(customer: Node2D) -> bool:
 		print("[Machine] Brew failed:", name, "took_money", took_money)
 		_apply_failure(customer, "machine_failed", took_money)
 		is_busy = false
-		return true
+		return false
 
 	current_coffee_stock -= 1
 	Global.add_money(coffee_price)

@@ -209,6 +209,9 @@ sources/2 = SubResource("TileSetAtlasSource_n0v8c")
 
 [node name="main" type="Node2D" unique_id=355175693]
 
+[node name="ProgressBar" parent="." unique_id=631009078 instance=ExtResource("10_choun")]
+offset_bottom = 27.0
+
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=695936920]
 position = Vector2(124, -48)
 navigation_polygon = SubResource("NavigationPolygon_tipki")
@@ -234,5 +237,3 @@ position = Vector2(124, -48)
 position = Vector2(94, 69)
 
 [node name="PhoneUI" parent="." unique_id=2023842308 instance=ExtResource("9_choun")]
-
-[node name="ProgressBar" parent="." unique_id=631009078 instance=ExtResource("10_choun")]

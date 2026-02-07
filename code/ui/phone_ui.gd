@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+const PhoneUIBuildService = preload("res://code/ui/PhoneUIBuildService.gd")
+const PhoneUIDetailsService = preload("res://code/ui/PhoneUIDetailsService.gd")
+
 @onready var main_control = $MainControl
 @onready var left_column = $MainControl/PhoneBody/ContentBox/LeftColumn
 @onready var stats_label = $MainControl/PhoneBody/ContentBox/LeftColumn/StatsLabel
@@ -41,17 +44,16 @@ var current_items: Array = []
 var storage_products := [
 	{"id": "raw_coffee", "name": "Cafe brut", "unit_cost": RAW_UNIT_COST}
 ]
-var _pending_build_scene: PackedScene
-var _pending_build_cost: float = 0.0
-var _pending_build_name: String = ""
-var _build_ghost: Node2D
-const BUILD_SNAP_TOLERANCE := 8.0
+var build_service: RefCounted
+var details_service: RefCounted
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	add_to_group("phone_ui")
 	labels.bbcode_enabled = true
 	hide()
+	build_service = PhoneUIBuildService.new(self)
+	details_service = PhoneUIDetailsService.new(self)
 
 	btn_machines.pressed.connect(func(): _set_tab(Tab.MACHINES))
 	btn_storages.pressed.connect(func(): _set_tab(Tab.STORAGES))
@@ -78,25 +80,21 @@ func _ready():
 	_set_tab(Tab.MACHINES)
 
 func _unhandled_input(event):
-	if _pending_build_scene and event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			_place_pending_build()
-		elif event.button_index == MOUSE_BUTTON_RIGHT:
-			_cancel_pending_build()
+	if build_service and build_service.handle_unhandled_input(event):
 		return
 	if event.is_action_pressed("toggle_phone"):
 		_toggle_visibility()
 
 func _process(_delta):
 	if not visible:
-		if _pending_build_scene:
-			_update_build_ghost()
+		if build_service:
+			build_service.process()
 		return
 	_refresh_header_stats()
 	_refresh_footer()
 	_refresh_selected_details()
-	if _pending_build_scene:
-		_update_build_ghost()
+	if build_service:
+		build_service.process()
 
 func _toggle_visibility():
 	visible = not visible
@@ -183,7 +181,7 @@ func _show_details(index: int):
 	var item = current_items[index] if index < current_items.size() else null
 	match current_tab:
 		Tab.MACHINES:
-			labels.text = _machine_details(item)
+			labels.text = details_service.machine_details(item) if details_service else ""
 			add_button.visible = false
 			_set_storage_purchase_visible(false)
 			add_machine_button.visible = true
@@ -196,7 +194,7 @@ func _show_details(index: int):
 			fill_button.text = "Remplir (sac -> machine)"
 			upgrade_button.text = "Ameliorer machine (" + str(int(_machine_upgrade_cost())) + ")"
 		Tab.STORAGES:
-			labels.text = _storage_details(item)
+			labels.text = details_service.storage_details(item) if details_service else ""
 			add_button.visible = true
 			add_button.text = "Auto remplissage: " + ("ON" if item and item.auto_fill_enabled else "OFF")
 			_set_storage_purchase_visible(true)
@@ -211,7 +209,7 @@ func _show_details(index: int):
 			alt_button.text = "Deposer x10"
 			upgrade_button.text = "Ameliorer stockage (" + str(int(_storage_upgrade_cost())) + ")"
 		Tab.CATS:
-			labels.text = _cat_details(item)
+			labels.text = details_service.cat_details(item) if details_service else ""
 			add_button.visible = false
 			_set_storage_purchase_visible(false)
 			add_machine_button.visible = false
@@ -222,7 +220,7 @@ func _show_details(index: int):
 			alt_button.visible = false
 			buy_raw_button.visible = false
 		Tab.CAT_HOMES:
-			labels.text = _cat_home_details(item)
+			labels.text = details_service.cat_home_details(item) if details_service else ""
 			add_button.visible = false
 			_set_storage_purchase_visible(false)
 			add_machine_button.visible = false
@@ -234,7 +232,7 @@ func _show_details(index: int):
 			buy_raw_button.visible = false
 			upgrade_button.text = "Ameliorer cats house (" + str(int(_cat_home_upgrade_cost())) + ")"
 		Tab.PLAYER:
-			labels.text = _player_details()
+			labels.text = details_service.player_details() if details_service else ""
 			add_button.visible = false
 			_set_storage_purchase_visible(false)
 			add_machine_button.visible = false
@@ -301,117 +299,6 @@ func _get_selected_item():
 		return null
 	var index = selected[0]
 	return current_items[index] if index < current_items.size() else null
-
-func _machine_details(machine) -> String:
-	if machine == null or not is_instance_valid(machine):
-		return "Machine manquante"
-	var lines = []
-	lines.append("[b]Machine[/b]")
-	lines.append("Stock: " + str(machine.current_coffee_stock) + " / " + str(machine.max_coffee_stock))
-	lines.append("Temps infusion: " + str(snapped(machine.brewing_time, 0.1)) + "s")
-	lines.append("Echec: " + str(int(machine.fail_chance * 100.0)) + "%")
-	lines.append("Mauvais gout: " + str(int(machine.bad_taste_chance * 100.0)) + "%")
-	lines.append("Prend argent si echec: " + str(int(machine.take_money_on_fail_chance * 100.0)) + "%")
-	lines.append("Prix cafe: " + str(snapped(machine.coffee_price, 0.1)))
-	lines.append("Satisfaction (+/-): " + str(snapped(machine.satisfaction_reward, 0.1)) + " / " + str(snapped(machine.satisfaction_penalty, 0.1)))
-	lines.append("Boost peche: x" + str(snapped(machine.coffee_fishing_boost, 0.1)) + " pendant " + str(snapped(machine.coffee_energy_duration, 0.1)) + "s")
-	var success_rate = max(0.0, 1.0 - machine.fail_chance)
-	var expected_per_brew = machine.coffee_price * success_rate
-	var expected_per_min = (60.0 / max(0.1, machine.brewing_time)) * expected_per_brew
-	lines.append("Occupe: " + str(machine.is_busy))
-	lines.append("Succes: " + str(int(success_rate * 100.0)) + "%")
-	lines.append("Gain moyen / infusion: " + str(snapped(expected_per_brew, 0.1)))
-	lines.append("Gain moyen / min: " + str(snapped(expected_per_min, 0.1)))
-	return "\n".join(lines)
-
-func _storage_details(storage) -> String:
-	if storage == null or not is_instance_valid(storage):
-		return "Stockage manquant"
-	var lines = []
-	lines.append("[b]Stockage[/b]")
-	lines.append("Stock: " + str(storage.coffee_inventory) + " / " + str(storage.max_inventory))
-	lines.append("Arrivage: +" + str(storage.arrival_amount) + " / " + str(snapped(storage.arrival_interval, 0.1)) + "s")
-	lines.append("Auto remplissage: " + ("ON" if storage.auto_fill_enabled else "OFF"))
-	lines.append("Cout auto: " + str(snapped(storage.auto_fill_cost_per_unit, 0.1)) + " / unite")
-	lines.append("Capacite sac: " + str(Global.max_coffee_capacity))
-	lines.append("Sac actuel: " + str(Global.raw_coffee_carried))
-	var free_space = max(0, storage.max_inventory - storage.coffee_inventory)
-	var fill_time = 0.0
-	if storage.arrival_amount > 0:
-		fill_time = (free_space / float(storage.arrival_amount)) * storage.arrival_interval
-	lines.append("Place libre: " + str(free_space))
-	lines.append("Temps pour remplir: " + str(snapped(fill_time, 0.1)) + "s")
-	return "\n".join(lines)
-
-func _cat_details(cat) -> String:
-	if cat == null or not is_instance_valid(cat):
-		return "Chat manquant"
-	var is_special = cat.get("is_special")
-	var health = cat.get("health")
-	var energy = cat.get("energy")
-	var max_energy = cat.get("max_energy")
-	var lines = []
-	lines.append("[b]Chat[/b]")
-	lines.append("Special: " + str(is_special))
-	lines.append("Vie: " + str(health))
-	lines.append("Energie: " + str(int(energy)) + " / " + str(int(max_energy)))
-	var state_label = str(cat.current_state)
-	if cat.current_state == 0:
-		state_label = "Balade"
-	elif cat.current_state == 1:
-		state_label = "Cherche cafe"
-	elif cat.current_state == 2:
-		state_label = "Attente"
-	elif cat.current_state == 3:
-		state_label = "Boit"
-	lines.append("Etat: " + state_label)
-	return "\n".join(lines)
-
-func _storage_product_list_text() -> Array:
-	var result = []
-	for product in storage_products:
-		var name = product["name"]
-		var unit = product["unit_cost"]
-		result.append(name + " (" + str(snapped(unit, 0.1)) + "$)")
-	return result
-
-func _cat_home_details(home) -> String:
-	if home == null or not is_instance_valid(home):
-		return "Cats house manquante"
-	var lines = []
-	lines.append("[b]Cats house[/b]")
-	lines.append("Niveau: " + str(home.upgrade_level))
-	lines.append("Chats max: " + str(home.max_cats_alive))
-	lines.append("Spawn: " + str(snapped(home.min_spawn_interval, 0.1)) + "s - " + str(snapped(home.max_spawn_interval, 0.1)) + "s")
-	lines.append("Chance: " + str(int(home.min_spawn_chance * 100.0)) + "% - " + str(int(home.max_spawn_chance * 100.0)) + "%")
-	var current = get_tree().get_nodes_in_group("cats").size()
-	var capacity_rate = 0.0
-	if home.max_cats_alive > 0:
-		capacity_rate = float(current) / float(home.max_cats_alive)
-	lines.append("Chats actuels: " + str(current))
-	lines.append("Occupation: " + str(int(capacity_rate * 100.0)) + "%")
-	return "\n".join(lines)
-
-func _stats_details() -> String:
-	var lines = []
-	lines.append("[b]Stats[/b]")
-	lines.append("Argent: " + str(snapped(Global.money, 0.1)))
-	lines.append("Satisfaction: " + str(int(Global.global_satisfaction)))
-	lines.append("Cafe brut sac: " + str(Global.raw_coffee_carried) + " / " + str(Global.max_coffee_capacity))
-	lines.append("Stock zone: " + str(_total_storage_stock()))
-	lines.append("Chats: " + str(get_tree().get_nodes_in_group("cats").size()))
-	return "\n".join(lines)
-
-func _player_details() -> String:
-	var lines = []
-	lines.append("[b]Joueur[/b]")
-	lines.append("Peche lvl: " + str(Global.fishing_level))
-	lines.append("Argent: " + str(snapped(Global.money, 0.1)))
-	lines.append("Cafe brut sac: " + str(Global.raw_coffee_carried) + " / " + str(Global.max_coffee_capacity))
-	lines.append("Boost peche: x" + str(snapped(Global.fishing_boost_multiplier, 0.1)) + " (" + str(snapped(Global.fishing_boost_time_left, 0.1)) + "s)")
-	lines.append("Tick peche: " + str(snapped(Global.fishing_tick_interval, 0.1)) + "s")
-	lines.append("Gain moyen / min: " + str(snapped((60.0 / max(0.1, Global.fishing_tick_interval)) * (1.0 * Global.fishing_boost_multiplier), 0.1)))
-	return "\n".join(lines)
 
 func _refresh_footer():
 	buy_raw_button.text = "Acheter cafe brut x" + str(RAW_BUY_AMOUNT) + " (" + str(int(RAW_BUY_COST)) + ")"
@@ -527,7 +414,8 @@ func _on_buy_raw_pressed():
 
 func _refresh_storage_products():
 	products_list.clear()
-	for line in _storage_product_list_text():
+	var lines = details_service.storage_product_list_text(storage_products) if details_service else []
+	for line in lines:
 		products_list.add_item(line)
 	if products_list.item_count > 0:
 		products_list.select(0)
@@ -570,88 +458,8 @@ func _buy_selected_product(amount: int):
 		display_info("Achete x" + str(final_amount))
 
 func _start_build(scene_path: String, cost: float, label: String):
-	if Global.money < cost:
-		display_info("Pas assez d'argent")
-		return
-	_pending_build_scene = load(scene_path)
-	_pending_build_cost = cost
-	_pending_build_name = label
-	visible = false
-	get_tree().paused = false
-	_create_build_ghost()
-	print("[Build] Start:", label, "cost", cost)
-
-func _place_pending_build():
-	if not _pending_build_scene:
-		return
-	if Global.money < _pending_build_cost:
-		display_info("Pas assez d'argent")
-		_cancel_pending_build()
-		return
-	var world_pos = _get_mouse_world_position()
-	var instance = _pending_build_scene.instantiate()
-	instance.global_position = world_pos
-	var parent = get_tree().current_scene
-	var nav = parent.get_node_or_null("NavigationRegion2D")
-	if nav:
-		nav.add_child(instance)
-	else:
-		parent.add_child(instance)
-	Global.add_money(-_pending_build_cost)
-	print("[Build] Placed:", _pending_build_name, "at", world_pos)
-	_cancel_pending_build()
-
-func _cancel_pending_build():
-	_pending_build_scene = null
-	_pending_build_cost = 0.0
-	_pending_build_name = ""
-	if _build_ghost and is_instance_valid(_build_ghost):
-		_build_ghost.queue_free()
-	_build_ghost = null
-
-func _create_build_ghost():
-	if not _pending_build_scene:
-		return
-	if _build_ghost and is_instance_valid(_build_ghost):
-		_build_ghost.queue_free()
-	_build_ghost = _pending_build_scene.instantiate()
-	_build_ghost.modulate = Color(1, 1, 1, 0.5)
-	_build_ghost.process_mode = Node.PROCESS_MODE_DISABLED
-	var parent = get_tree().current_scene
-	var nav = parent.get_node_or_null("NavigationRegion2D")
-	if nav:
-		nav.add_child(_build_ghost)
-	else:
-		parent.add_child(_build_ghost)
-	_update_build_ghost()
-
-func _update_build_ghost():
-	if not _build_ghost or not is_instance_valid(_build_ghost):
-		return
-	var pos = _get_mouse_world_position()
-	_build_ghost.global_position = pos
-	var ok = _is_valid_build_position(pos)
-	if ok:
-		_build_ghost.modulate = Color(0.2, 1.0, 0.2, 0.5)
-	else:
-		_build_ghost.modulate = Color(1.0, 0.2, 0.2, 0.5)
-
-func _get_mouse_world_position() -> Vector2:
-	var mouse_pos = get_viewport().get_mouse_position()
-	return get_viewport().get_canvas_transform().affine_inverse() * mouse_pos
-
-func _is_valid_build_position(world_pos: Vector2) -> bool:
-	var parent = get_tree().current_scene
-	if not parent:
-		return true
-	var world = parent.get_world_2d()
-	if not world:
-		return true
-	var nav_map = world.navigation_map
-	if nav_map == RID():
-		return true
-	var closest = NavigationServer2D.map_get_closest_point(nav_map, world_pos)
-	return world_pos.distance_to(closest) <= BUILD_SNAP_TOLERANCE
+	if build_service:
+		build_service.start_build(scene_path, cost, label)
 
 func _on_close_pressed():
 	_toggle_visibility()
