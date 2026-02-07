@@ -59,8 +59,10 @@ func _physics_process(delta):
 			velocity = Vector2.ZERO
 			nav_agent.set_velocity(Vector2.ZERO)
 			if is_instance_valid(target_machine) and not target_machine.is_busy:
-				target_machine.start_brewing(self)
-				current_state = State.DRINKING
+				if target_machine.current_coffee_stock > 0:
+					var started = await target_machine.start_brewing(self)
+					if started:
+						current_state = State.DRINKING
 
 		State.DRINKING:
 			velocity = Vector2.ZERO

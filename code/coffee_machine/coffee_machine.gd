@@ -44,13 +44,13 @@ func apply_upgrade_level(level: int):
 	current_coffee_stock = clamp(current_coffee_stock, 0, max_coffee_stock)
 	print("[Machine] Upgrade", name, "lvl", level, "stock", max_coffee_stock, "brew", brewing_time)
 
-func start_brewing(customer: Node2D):
+func start_brewing(customer: Node2D) -> bool:
 	if is_busy:
-		return
+		return false
 	if current_coffee_stock <= 0:
 		print("[Machine] Out of stock:", name)
 		_apply_failure(customer, "out_of_stock", false)
-		return
+		return false
 
 	is_busy = true
 	print("[Machine] Start brew:", name, "stock", current_coffee_stock)
@@ -66,7 +66,7 @@ func start_brewing(customer: Node2D):
 		print("[Machine] Brew failed:", name, "took_money", took_money)
 		_apply_failure(customer, "machine_failed", took_money)
 		is_busy = false
-		return
+		return true
 
 	current_coffee_stock -= 1
 	Global.add_money(coffee_price)
@@ -87,6 +87,7 @@ func start_brewing(customer: Node2D):
 		Global.apply_satisfaction_delta(delta, delta < 0)
 
 	is_busy = false
+	return true
 
 func _apply_failure(customer: Node2D, reason: String, took_money: bool):
 	var penalty = satisfaction_penalty * 0.8
