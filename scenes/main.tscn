@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://35dmdbnkt14" path="res://scenes/stockage.tscn" id="6_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://ggr0keyq2v4p" path="res://scenes/cats_home.tscn" id="7_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://cviegt5njhfut" path="res://scenes/cats.tscn" id="7_tipki"]
-[ext_resource type="PackedScene" uid="uid://btpp86brwpmj4" path="res://scenes/phone_ui.tscn" id="9_choun"]
+[ext_resource type="PackedScene" uid="uid://bxhixr1jaxpst" path="res://scenes/phone_ui.tscn" id="9_choun"]
 [ext_resource type="PackedScene" uid="uid://dmol87a0ad8ov" path="res://scenes/progress_bar.tscn" id="10_choun"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_tipki"]
@@ -209,12 +209,6 @@ sources/2 = SubResource("TileSetAtlasSource_n0v8c")
 
 [node name="main" type="Node2D" unique_id=355175693]
 
-[node name="CharacterBody2D" parent="." unique_id=866001324 instance=ExtResource("4_85g3d")]
-position = Vector2(124, -48)
-
-[node name="cats" parent="." unique_id=1655672893 instance=ExtResource("7_tipki")]
-position = Vector2(94, 69)
-
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=695936920]
 position = Vector2(124, -48)
 navigation_polygon = SubResource("NavigationPolygon_tipki")
@@ -232,6 +226,12 @@ position = Vector2(122, -102)
 
 [node name="coffeeMachine" parent="NavigationRegion2D" unique_id=1348650551 instance=ExtResource("5_choun")]
 position = Vector2(0, -97)
+
+[node name="CharacterBody2D" parent="." unique_id=866001324 instance=ExtResource("4_85g3d")]
+position = Vector2(124, -48)
+
+[node name="cats" parent="." unique_id=1655672893 instance=ExtResource("7_tipki")]
+position = Vector2(94, 69)
 
 [node name="PhoneUI" parent="." unique_id=2023842308 instance=ExtResource("9_choun")]
 

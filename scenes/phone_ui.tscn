@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://btpp86brwpmj4"]
+[gd_scene format=3 uid="uid://bxhixr1jaxpst"]
 
 [ext_resource type="Script" uid="uid://b8a3p1r1v5c7y" path="res://code/ui/phone_ui.gd" id="1_g7ywp"]
 
@@ -17,63 +17,140 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PhoneBody" type="Panel" parent="MainControl" unique_id=1038961277]
-custom_minimum_size = Vector2(400, 600)
+custom_minimum_size = Vector2(620, 360)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -310.0
+offset_top = -180.0
+offset_right = 310.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ContentBox" type="HBoxContainer" parent="MainControl/PhoneBody" unique_id=518428567]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+separation = 8
 
 [node name="LeftColumn" type="VBoxContainer" parent="MainControl/PhoneBody/ContentBox" unique_id=1043368667]
 layout_mode = 2
+custom_minimum_size = Vector2(220, 0)
+size_flags_horizontal = 3
 
-[node name="TabsContainer" type="HBoxContainer" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=802111542]
+[node name="StatsLabel" type="Label" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=1444896323]
 layout_mode = 2
+text = "Or: 0 | Satisfaction: 100"
+
+[node name="TabsContainer" type="GridContainer" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=802111542]
+layout_mode = 2
+columns = 3
+size_flags_horizontal = 3
+
+[node name="AddMachineButton" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=1171768711]
+layout_mode = 2
+text = "+ Ajouter machine"
+size_flags_horizontal = 3
+
+[node name="AddStorageButton" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=830815282]
+layout_mode = 2
+text = "+ Ajouter stockage"
+size_flags_horizontal = 3
+
+[node name="AddCatHomeButton" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=1923483262]
+layout_mode = 2
+text = "+ Ajouter cats house"
+size_flags_horizontal = 3
 
 [node name="BtnMachines" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=682231265]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="BtnStorages" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=2088579766]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="BtnSpawners" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=2139570953]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="BtnCats" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=986023217]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="BtnPlayer" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=351256429]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=621522784]
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_horizontal = 3
 
 [node name="ItemList" type="ItemList" parent="MainControl/PhoneBody/ContentBox/LeftColumn/ScrollContainer" unique_id=47703762]
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_horizontal = 3
 
 [node name="RightColumn" type="VBoxContainer" parent="MainControl/PhoneBody/ContentBox" unique_id=701157613]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="DetailPanel" type="PanelContainer" parent="MainControl/PhoneBody/ContentBox/RightColumn" unique_id=1162381527]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="VBoxDetails" type="VBoxContainer" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel" unique_id=1225330596]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Labels" type="RichTextLabel" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=134941767]
 layout_mode = 2
+custom_minimum_size = Vector2(0, 140)
+fit_content = true
+scroll_active = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AddButton" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=1317813087]
+layout_mode = 2
+text = "+ Ajouter"
+
+[node name="ProductsLabel" type="Label" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=1165083756]
+layout_mode = 2
+text = "Produits"
+
+[node name="ProductsList" type="ItemList" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=33409932]
+layout_mode = 2
+
+[node name="BuyRow" type="HBoxContainer" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=2112144421]
+layout_mode = 2
+
+[node name="Buy1Button" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails/BuyRow" unique_id=873906619]
+layout_mode = 2
+text = "X1"
+
+[node name="Buy10Button" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails/BuyRow" unique_id=110613311]
+layout_mode = 2
+text = "X10"
+
+[node name="BuyMaxButton" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails/BuyRow" unique_id=2013207320]
+layout_mode = 2
+text = "MAX"
 
 [node name="FillButton" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=538886881]
 layout_mode = 2
@@ -81,7 +158,31 @@ layout_mode = 2
 [node name="UpgradeButton" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=506207772]
 layout_mode = 2
 
+[node name="AltButton" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=1599333804]
+layout_mode = 2
+
+[node name="FooterRow" type="HBoxContainer" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails" unique_id=2019194202]
+layout_mode = 2
+
+[node name="BuyRawButton" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails/FooterRow" unique_id=1760065336]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails/FooterRow" unique_id=1639282140]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CloseButton" type="Button" parent="MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails/FooterRow" unique_id=650015822]
+layout_mode = 2
+
 [node name="InfoLabel" type="Label" parent="MainControl/PhoneBody" unique_id=1324928819]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -24.0
+offset_right = -12.0
+offset_bottom = -6.0
+grow_horizontal = 0
+grow_vertical = 2

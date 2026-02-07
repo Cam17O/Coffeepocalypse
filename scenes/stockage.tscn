@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bupkskkc52kpi" path="res://Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="1_8l6qr"]
 [ext_resource type="Script" uid="uid://cyk7cu5nxv12e" path="res://code/storage/storage.gd" id="1_ky4oa"]
+[ext_resource type="PackedScene" uid="uid://dmol87a0ad8ov" path="res://scenes/progress_bar.tscn" id="2_progress"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8l6qr"]
 size = Vector2(17, 20)
@@ -30,6 +31,8 @@ shape = SubResource("RectangleShape2D_8l6qr")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1161312896]
 position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_ky4oa")
+
+[node name="ProgressBar" parent="." unique_id=643814802 instance=ExtResource("2_progress")]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_interaction_area_body_exited"]

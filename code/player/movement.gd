@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 @export var speed = 200.0
 @onready var anim_player = $AnimationPlayer
+@onready var carry_label = $CarryLabel
 
 func _physics_process(_delta):
 	var direction = Input.get_vector("left", "right", "up", "down")
@@ -18,3 +19,9 @@ func _physics_process(_delta):
 			anim_player.play("walk_down" if direction.y > 0 else "walk_up")
 	else:
 		anim_player.play("RESET")
+
+	if carry_label:
+		var amount = Global.raw_coffee_carried
+		carry_label.visible = amount > 0
+		if amount > 0:
+			carry_label.text = str(amount) + " cafe brut"

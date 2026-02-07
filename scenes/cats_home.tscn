@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://nrcq1spo08e5" path="res://code/cats_home/cats_home.gd" id="1_0rfwf"]
 [ext_resource type="Texture2D" uid="uid://caobhn7vtajic" path="res://Sprout Lands - Sprites - Basic pack/Objects/Free_Chicken_House.png" id="1_yk6af"]
 [ext_resource type="PackedScene" uid="uid://cviegt5njhfut" path="res://scenes/cats.tscn" id="2_3lpbd"]
+[ext_resource type="PackedScene" uid="uid://dmol87a0ad8ov" path="res://scenes/progress_bar.tscn" id="3_progress"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0rfwf"]
 size = Vector2(38, 49)
@@ -29,3 +30,5 @@ shape = SubResource("RectangleShape2D_0rfwf")
 shape = SubResource("CircleShape2D_3lpbd")
 
 [node name="Timer" type="Timer" parent="." unique_id=1550748316]
+
+[node name="ProgressBar" parent="." unique_id=429182460 instance=ExtResource("3_progress")]

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://yj2skwsbsw8g" path="res://code/cats/cats.gd" id="1_8onlj"]
 [ext_resource type="Texture2D" uid="uid://cdivdf1inna87" path="res://Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Spritesheet.png" id="1_a5agg"]
+[ext_resource type="PackedScene" uid="uid://dmol87a0ad8ov" path="res://scenes/progress_bar.tscn" id="2_progress"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8onlj"]
 size = Vector2(14, 16)
@@ -31,3 +32,5 @@ shape = SubResource("CircleShape2D_u66c4")
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1886815628]
 avoidance_enabled = true
 radius = 20.0
+
+[node name="ProgressBar" parent="." unique_id=2144146462 instance=ExtResource("2_progress")]
