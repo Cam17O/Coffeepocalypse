@@ -1,5 +1,7 @@
 extends RefCounted
 
+const GameConfig = preload("res://code/global/GameConfig.gd")
+
 var _global: Node
 var _pending_apply_upgrades: bool = false
 
@@ -28,7 +30,6 @@ func _try_apply_upgrades():
 	_pending_apply_upgrades = false
 
 func _apply_upgrades_to_world(machines: Array, storages: Array, homes: Array):
-	_global.fishing_tick_interval = max(1.5, 4.0 - 0.2 * _global.fishing_upgrade_level)
 	for machine in machines:
 		if machine.has_method("apply_upgrade_level"):
 			machine.apply_upgrade_level(_global.machine_upgrade_level)

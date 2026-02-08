@@ -17,7 +17,6 @@ func machine_details(machine) -> String:
 	lines.append("Prend argent si echec: " + str(int(machine.take_money_on_fail_chance * 100.0)) + "%")
 	lines.append("Prix cafe: " + str(snapped(machine.coffee_price, 0.1)))
 	lines.append("Satisfaction (+/-): " + str(snapped(machine.satisfaction_reward, 0.1)) + " / " + str(snapped(machine.satisfaction_penalty, 0.1)))
-	lines.append("Boost peche: x" + str(snapped(machine.coffee_fishing_boost, 0.1)) + " pendant " + str(snapped(machine.coffee_energy_duration, 0.1)) + "s")
 	var success_rate = max(0.0, 1.0 - machine.fail_chance)
 	var expected_per_brew = machine.coffee_price * success_rate
 	var expected_per_min = (60.0 / max(0.1, machine.brewing_time)) * expected_per_brew
@@ -102,7 +101,7 @@ func cat_home_details(home) -> String:
 	lines.append("[b]Cats house[/b]")
 	lines.append("Niveau: " + str(home.upgrade_level))
 	lines.append("Chats max: " + str(home.max_cats_alive))
-	lines.append("Spawn: " + str(snapped(home.min_spawn_interval, 0.1)) + "s - " + str(snapped(home.max_spawn_interval, 0.1)) + "s")
+	lines.append("Spawn: " + str(snapped(home.spawn_interval, 0.1)) + "s")
 	lines.append("Chance: " + str(int(home.min_spawn_chance * 100.0)) + "% - " + str(int(home.max_spawn_chance * 100.0)) + "%")
 	var current = _ui.get_tree().get_nodes_in_group("cats").size()
 	var capacity_rate = 0.0
@@ -125,10 +124,6 @@ func stats_details() -> String:
 func player_details() -> String:
 	var lines = []
 	lines.append("[b]Joueur[/b]")
-	lines.append("Peche lvl: " + str(Global.fishing_level))
 	lines.append("Argent: " + str(snapped(Global.money, 0.1)))
 	lines.append("Cafe brut sac: " + str(Global.raw_coffee_carried) + " / " + str(Global.max_coffee_capacity))
-	lines.append("Boost peche: x" + str(snapped(Global.fishing_boost_multiplier, 0.1)) + " (" + str(snapped(Global.fishing_boost_time_left, 0.1)) + "s)")
-	lines.append("Tick peche: " + str(snapped(Global.fishing_tick_interval, 0.1)) + "s")
-	lines.append("Gain moyen / min: " + str(snapped((60.0 / max(0.1, Global.fishing_tick_interval)) * (1.0 * Global.fishing_boost_multiplier), 0.1)))
 	return "\n".join(lines)

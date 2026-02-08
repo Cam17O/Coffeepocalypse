@@ -25,11 +25,9 @@ func _collect_data() -> Dictionary:
 		"money": _global.money,
 		"raw_coffee_carried": _global.raw_coffee_carried,
 		"max_coffee_capacity": _global.max_coffee_capacity,
-		"fishing_level": _global.fishing_level,
 		"global_satisfaction": _global.global_satisfaction,
 		"machine_upgrade_level": _global.machine_upgrade_level,
 		"storage_upgrade_level": _global.storage_upgrade_level,
-		"fishing_upgrade_level": _global.fishing_upgrade_level,
 		"cat_home_upgrade_level": _global.cat_home_upgrade_level
 	}
 
@@ -54,10 +52,8 @@ func _apply_data(parsed: Dictionary):
 	_global.money = parsed.get("money", _global.money)
 	_global.raw_coffee_carried = parsed.get("raw_coffee_carried", _global.raw_coffee_carried)
 	_global.max_coffee_capacity = parsed.get("max_coffee_capacity", _global.max_coffee_capacity)
-	_global.fishing_level = parsed.get("fishing_level", _global.fishing_level)
 	_global.global_satisfaction = parsed.get("global_satisfaction", _global.global_satisfaction)
 	_global.machine_upgrade_level = parsed.get("machine_upgrade_level", _global.machine_upgrade_level)
 	_global.storage_upgrade_level = parsed.get("storage_upgrade_level", _global.storage_upgrade_level)
-	_global.fishing_upgrade_level = parsed.get("fishing_upgrade_level", _global.fishing_upgrade_level)
 	_global.cat_home_upgrade_level = parsed.get("cat_home_upgrade_level", _global.cat_home_upgrade_level)
 	_global.queue_apply_upgrades()

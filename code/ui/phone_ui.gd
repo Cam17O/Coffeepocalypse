@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+const GameConfig = preload("res://code/global/GameConfig.gd")
 const PhoneUIBuildService = preload("res://code/ui/PhoneUIBuildService.gd")
 const PhoneUIDetailsService = preload("res://code/ui/PhoneUIDetailsService.gd")
 
@@ -31,12 +32,12 @@ const PhoneUIDetailsService = preload("res://code/ui/PhoneUIDetailsService.gd")
 @onready var close_button = $MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails/FooterRow/CloseButton
 @onready var info_label = $MainControl/PhoneBody/InfoLabel
 
-const RAW_BUY_AMOUNT := 10
-const RAW_BUY_COST := 40.0
+const RAW_BUY_AMOUNT := GameConfig.RAW_BUY_AMOUNT
+const RAW_BUY_COST := GameConfig.RAW_BUY_COST
 const RAW_UNIT_COST := RAW_BUY_COST / RAW_BUY_AMOUNT
-const BUILD_COST_MACHINE := 240.0
-const BUILD_COST_STORAGE := 180.0
-const BUILD_COST_CAT_HOME := 320.0
+const BUILD_COST_MACHINE := GameConfig.BUILD_COST_MACHINE
+const BUILD_COST_STORAGE := GameConfig.BUILD_COST_STORAGE
+const BUILD_COST_CAT_HOME := GameConfig.BUILD_COST_CAT_HOME
 
 enum Tab { MACHINES, STORAGES, CAT_HOMES, CATS, PLAYER }
 var current_tab: Tab = Tab.MACHINES
@@ -239,10 +240,9 @@ func _show_details(index: int):
 			add_storage_button.visible = false
 			add_cat_home_button.visible = false
 			fill_button.visible = false
-			upgrade_button.visible = true
+			upgrade_button.visible = false
 			alt_button.visible = false
 			buy_raw_button.visible = false
-			upgrade_button.text = "Ameliorer peche (" + str(int(_fishing_upgrade_cost())) + ")"
 
 func _on_fill_pressed():
 	var item = _get_selected_item()
@@ -265,8 +265,6 @@ func _on_upgrade_pressed():
 			_upgrade_storage()
 		Tab.CAT_HOMES:
 			_upgrade_cat_home()
-		Tab.PLAYER:
-			_upgrade_fishing()
 		_:
 			pass
 	_refresh_selected_details()
@@ -307,16 +305,13 @@ func _refresh_header_stats():
 	stats_label.text = "Or: " + str(int(Global.money)) + " | Satisfaction: " + str(int(Global.global_satisfaction))
 
 func _machine_upgrade_cost() -> float:
-	return 40.0 + Global.machine_upgrade_level * 25.0
+	return GameConfig.UPGRADE_MACHINE_BASE_COST + Global.machine_upgrade_level * GameConfig.UPGRADE_MACHINE_PER_LEVEL_COST
 
 func _storage_upgrade_cost() -> float:
-	return 30.0 + Global.storage_upgrade_level * 20.0
-
-func _fishing_upgrade_cost() -> float:
-	return 25.0 + Global.fishing_upgrade_level * 15.0
+	return GameConfig.UPGRADE_STORAGE_BASE_COST + Global.storage_upgrade_level * GameConfig.UPGRADE_STORAGE_PER_LEVEL_COST
 
 func _cat_home_upgrade_cost() -> float:
-	return 35.0 + Global.cat_home_upgrade_level * 25.0
+	return GameConfig.UPGRADE_CAT_HOME_BASE_COST + Global.cat_home_upgrade_level * GameConfig.UPGRADE_CAT_HOME_PER_LEVEL_COST
 
 func _upgrade_machine():
 	var cost = _machine_upgrade_cost()
@@ -354,15 +349,6 @@ func _upgrade_cat_home():
 		if home.has_method("apply_upgrade_level"):
 			home.apply_upgrade_level(Global.cat_home_upgrade_level)
 
-func _upgrade_fishing():
-	var cost = _fishing_upgrade_cost()
-	if Global.money < cost:
-		return
-	Global.add_money(-cost)
-	Global.fishing_upgrade_level += 1
-	Global.fishing_level += 1
-	Global.fishing_tick_interval = max(1.5, Global.fishing_tick_interval - 0.2)
-
 func _fill_machine(machine):
 	if machine == null or not is_instance_valid(machine):
 		return
@@ -378,7 +364,7 @@ func _take_from_storage(storage):
 		return
 	if Global.raw_coffee_carried >= Global.max_coffee_capacity or storage.coffee_inventory <= 0:
 		return
-	var amount = min(10, storage.coffee_inventory, Global.max_coffee_capacity - Global.raw_coffee_carried)
+	var amount = min(GameConfig.STORAGE_TRANSFER_AMOUNT, storage.coffee_inventory, Global.max_coffee_capacity - Global.raw_coffee_carried)
 	storage.coffee_inventory -= amount
 	Global.raw_coffee_carried += amount
 
@@ -388,7 +374,7 @@ func _deposit_to_storage(storage):
 	if Global.raw_coffee_carried <= 0 or storage.coffee_inventory >= storage.max_inventory:
 		return
 	var space = storage.max_inventory - storage.coffee_inventory
-	var amount = min(10, space, Global.raw_coffee_carried)
+	var amount = min(GameConfig.STORAGE_TRANSFER_AMOUNT, space, Global.raw_coffee_carried)
 	storage.coffee_inventory += amount
 	Global.raw_coffee_carried -= amount
 
