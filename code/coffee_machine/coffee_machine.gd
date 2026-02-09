@@ -13,10 +13,12 @@ const GameConfig = preload("res://code/global/GameConfig.gd")
 @export var coffee_price: float = GameConfig.MACHINE_COFFEE_PRICE
 @export var satisfaction_reward: float = GameConfig.MACHINE_SATISFACTION_REWARD
 @export var satisfaction_penalty: float = GameConfig.MACHINE_SATISFACTION_PENALTY
+@export var max_workers: int = GameConfig.MACHINE_BASE_MAX_WORKERS
 
 var is_busy: bool = false
 var is_player_nearby: bool = false
 var waiting_count: int = 0
+var upgrade_level: int = 0
 
 var _base_brewing_time: float
 var _base_max_stock: int
@@ -24,6 +26,8 @@ var _base_fail_chance: float
 var _base_bad_taste_chance: float
 var _base_satisfaction_reward: float
 var _base_satisfaction_penalty: float
+var _base_max_workers: int
+var _workers: Array = []
 
 func _ready():
 	_base_brewing_time = brewing_time
@@ -32,18 +36,23 @@ func _ready():
 	_base_bad_taste_chance = bad_taste_chance
 	_base_satisfaction_reward = satisfaction_reward
 	_base_satisfaction_penalty = satisfaction_penalty
+	_base_max_workers = max_workers
 	current_coffee_stock = clamp(current_coffee_stock, 0, max_coffee_stock)
+	apply_upgrade_level(upgrade_level)
 	print("[Machine] Ready : ", name, ", stock : ", current_coffee_stock, "/", max_coffee_stock)
 
 # Apply an upgrade level to adjust machine parameters
 func apply_upgrade_level(level: int):
+	upgrade_level = level
 	max_coffee_stock = _base_max_stock * (level * GameConfig.MACHINE_STOCK_MULTIPLIER_PER_LEVEL)
 	brewing_time = max(GameConfig.MACHINE_BREWING_TIME_MIN, _base_brewing_time - GameConfig.MACHINE_BREWING_TIME_DECREASE_PER_LEVEL * level)
 	fail_chance = max(0.00, _base_fail_chance - GameConfig.MACHINE_FAIL_CHANCE_DECREASE_PER_LEVEL * level)
 	bad_taste_chance = max(0.00, _base_bad_taste_chance - GameConfig.MACHINE_BAD_TASTE_CHANCE_DECREASE_PER_LEVEL * level)
 	satisfaction_reward = _base_satisfaction_reward + GameConfig.MACHINE_SATISFACTION_REWARD_PER_LEVEL * level
 	satisfaction_penalty = min(GameConfig.MACHINE_SATISFACTION_PENALTY_MAX, _base_satisfaction_penalty + GameConfig.MACHINE_SATISFACTION_PENALTY_PER_LEVEL * level)
+	max_workers = _base_max_workers + level * GameConfig.MACHINE_MAX_WORKERS_PER_LEVEL
 	current_coffee_stock = clamp(current_coffee_stock, 0, max_coffee_stock)
+	_cleanup_workers()
 	print("[Machine] Upgrade : ", name, ", lvl : ", level, ", stock : ", max_coffee_stock, ", brew : ", brewing_time)
 
 # Register a customer as waiting for this machine
@@ -70,8 +79,8 @@ func start_brewing(customer: Node2D) -> bool:
 	is_busy = true
 	print("[Machine] Start brew : ", name, ", stock : ", current_coffee_stock)
 	if progress_bar:
-		progress_bar.start(brewing_time, self )
-	await get_tree().create_timer(brewing_time).timeout
+		progress_bar.start(_get_effective_brewing_time(), self )
+	await get_tree().create_timer(_get_effective_brewing_time()).timeout
 
 	# After brewing time, determine if the brew was successful or if it failed
 	var did_fail = randf() < fail_chance
@@ -152,9 +161,51 @@ func _brew_for_player():
 	is_busy = true
 	print("[Machine] Player brewing : ", name)
 	if progress_bar:
-		progress_bar.start(brewing_time, self )
-	await get_tree().create_timer(brewing_time).timeout
+		progress_bar.start(_get_effective_brewing_time(), self )
+	await get_tree().create_timer(_get_effective_brewing_time()).timeout
 	if current_coffee_stock > 0:
 		current_coffee_stock -= 1
 		print("[Machine] Player received : ", name, ", stock : ", current_coffee_stock)
 	is_busy = false
+
+func has_free_worker_slot() -> bool:
+	_cleanup_workers()
+	return _workers.size() < max_workers
+
+func register_worker(worker: Node) -> bool:
+	if not worker or _workers.has(worker):
+		return false
+	_cleanup_workers()
+	if _workers.size() >= max_workers:
+		return false
+	_workers.append(worker)
+	return true
+
+func unregister_worker(worker: Node):
+	if _workers.has(worker):
+		_workers.erase(worker)
+		_cleanup_workers()
+
+func get_worker_count() -> int:
+	_cleanup_workers()
+	return _workers.size()
+
+func _cleanup_workers():
+	var valid_workers := []
+	for worker in _workers:
+		if is_instance_valid(worker):
+			valid_workers.append(worker)
+	_workers = valid_workers
+	if _workers.size() > max_workers:
+		_workers.resize(max_workers)
+
+func _get_effective_brewing_time() -> float:
+	var bonus = GameConfig.MACHINE_WORK_PRODUCTIVITY_PER_CAT * float(get_worker_count())
+	var multiplier = 1.0 / (1.0 + bonus)
+	return max(GameConfig.MACHINE_BREWING_TIME_MIN, brewing_time * multiplier)
+
+func get_upgrade_level() -> int:
+	return upgrade_level
+
+func get_effective_brewing_time() -> float:
+	return _get_effective_brewing_time()

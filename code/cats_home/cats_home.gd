@@ -10,10 +10,13 @@ const GameConfig = preload("res://code/global/GameConfig.gd")
 @export var max_spawn_chance: float = GameConfig.CAT_HOME_MAX_SPAWN_CHANCE # spawn chance based on satisfaction, between min and max
 @export var max_cats_alive: int = GameConfig.CAT_HOME_BASE_MAX_CATS
 @export var spawn_radius: float = GameConfig.CAT_HOME_SPAWN_RADIUS
+@export var max_workers: int = GameConfig.CAT_HOME_BASE_MAX_WORKERS
 
 var upgrade_level: int = 0
 var _base_max_cats: int
 var _spawn_interval: float
+var _base_max_workers: int
+var _workers: Array = []
 
 @onready var spawn_timer = $Timer
 
@@ -22,8 +25,9 @@ func _ready():
 	name = random_name()
 	_base_max_cats = max_cats_alive
 	_spawn_interval = spawn_interval
+	_base_max_workers = max_workers
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
-	apply_upgrade_level(Global.cat_home_upgrade_level)
+	apply_upgrade_level(upgrade_level)
 	_reset_timer()
 	print("[CatsHome] Ready : ", name, "max : ", max_cats_alive)
 
@@ -39,6 +43,8 @@ func _process(_delta):
 func apply_upgrade_level(level: int):
 	upgrade_level = level
 	max_cats_alive = _base_max_cats + level * GameConfig.CAT_HOME_MAX_CATS_PER_LEVEL
+	max_workers = _base_max_workers + level * GameConfig.CAT_HOME_MAX_WORKERS_PER_LEVEL
+	_apply_work_productivity()
 	print("[CatsHome] Upgrade", name, "lvl", level, "max", max_cats_alive)
 
 # Timer callback to attempt spawning a new cat
@@ -92,6 +98,48 @@ func _input_event(_viewport, event, _shape_idx):
 			var ui = get_tree().get_first_node_in_group("phone_ui")
 			if ui and ui.has_method("open_tab"):
 				ui.open_tab(ui.Tab.CAT_HOMES, self)
+
+func has_free_worker_slot() -> bool:
+	_cleanup_workers()
+	return _workers.size() < max_workers
+
+func register_worker(worker: Node) -> bool:
+	if not worker or _workers.has(worker):
+		return false
+	_cleanup_workers()
+	if _workers.size() >= max_workers:
+		return false
+	_workers.append(worker)
+	_apply_work_productivity()
+	return true
+
+func unregister_worker(worker: Node):
+	if _workers.has(worker):
+		_workers.erase(worker)
+		_apply_work_productivity()
+
+func get_worker_count() -> int:
+	_cleanup_workers()
+	return _workers.size()
+
+func _cleanup_workers():
+	var valid_workers := []
+	for worker in _workers:
+		if is_instance_valid(worker):
+			valid_workers.append(worker)
+	_workers = valid_workers
+	if _workers.size() > max_workers:
+		_workers.resize(max_workers)
+
+func _apply_work_productivity():
+	_cleanup_workers()
+	var bonus = GameConfig.CAT_HOME_WORK_PRODUCTIVITY_PER_CAT * float(_workers.size())
+	var multiplier = 1.0 / (1.0 + bonus)
+	spawn_interval = max(GameConfig.CAT_HOME_SPAWN_INTERVAL_MIN, _spawn_interval * multiplier)
+	_reset_timer()
+
+func get_upgrade_level() -> int:
+	return upgrade_level
 
 # Utility function to generate a random cat name
 func random_name() -> String:

@@ -32,10 +32,13 @@ func _try_apply_upgrades():
 func _apply_upgrades_to_world(machines: Array, storages: Array, homes: Array):
 	for machine in machines:
 		if machine.has_method("apply_upgrade_level"):
-			machine.apply_upgrade_level(_global.machine_upgrade_level)
+			var level = machine.get_upgrade_level() if machine.has_method("get_upgrade_level") else 0
+			machine.apply_upgrade_level(level)
 	for storage in storages:
 		if storage.has_method("apply_upgrade_level"):
-			storage.apply_upgrade_level(_global.storage_upgrade_level)
+			var level = storage.get_upgrade_level() if storage.has_method("get_upgrade_level") else 0
+			storage.apply_upgrade_level(level)
 	for home in homes:
 		if home.has_method("apply_upgrade_level"):
-			home.apply_upgrade_level(_global.cat_home_upgrade_level)
+			var level = home.get_upgrade_level() if home.has_method("get_upgrade_level") else 0
+			home.apply_upgrade_level(level)

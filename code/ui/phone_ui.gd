@@ -193,7 +193,7 @@ func _show_details(index: int):
 			alt_button.visible = false
 			buy_raw_button.visible = false
 			fill_button.text = "Remplir (sac -> machine)"
-			upgrade_button.text = "Ameliorer machine (" + str(int(_machine_upgrade_cost())) + ")"
+			upgrade_button.text = "Ameliorer machine (" + str(int(_machine_upgrade_cost(item))) + ")"
 		Tab.STORAGES:
 			labels.text = details_service.storage_details(item) if details_service else ""
 			add_button.visible = true
@@ -208,7 +208,7 @@ func _show_details(index: int):
 			buy_raw_button.visible = false
 			fill_button.text = "Prendre x10"
 			alt_button.text = "Deposer x10"
-			upgrade_button.text = "Ameliorer stockage (" + str(int(_storage_upgrade_cost())) + ")"
+			upgrade_button.text = "Ameliorer stockage (" + str(int(_storage_upgrade_cost(item))) + ")"
 		Tab.CATS:
 			labels.text = details_service.cat_details(item) if details_service else ""
 			add_button.visible = false
@@ -231,7 +231,7 @@ func _show_details(index: int):
 			upgrade_button.visible = true
 			alt_button.visible = false
 			buy_raw_button.visible = false
-			upgrade_button.text = "Ameliorer cats house (" + str(int(_cat_home_upgrade_cost())) + ")"
+			upgrade_button.text = "Ameliorer cats house (" + str(int(_cat_home_upgrade_cost(item))) + ")"
 		Tab.PLAYER:
 			labels.text = details_service.player_details() if details_service else ""
 			add_button.visible = false
@@ -304,50 +304,68 @@ func _refresh_footer():
 func _refresh_header_stats():
 	stats_label.text = "Or: " + str(int(Global.money)) + " | Satisfaction: " + str(int(Global.global_satisfaction))
 
-func _machine_upgrade_cost() -> float:
-	return GameConfig.UPGRADE_MACHINE_BASE_COST + Global.machine_upgrade_level * GameConfig.UPGRADE_MACHINE_PER_LEVEL_COST
+func _machine_upgrade_cost(machine) -> float:
+	if machine == null or not is_instance_valid(machine):
+		return GameConfig.UPGRADE_MACHINE_BASE_COST
+	var level = machine.get_upgrade_level() if machine.has_method("get_upgrade_level") else 0
+	return GameConfig.UPGRADE_MACHINE_BASE_COST + level * GameConfig.UPGRADE_MACHINE_PER_LEVEL_COST
 
-func _storage_upgrade_cost() -> float:
-	return GameConfig.UPGRADE_STORAGE_BASE_COST + Global.storage_upgrade_level * GameConfig.UPGRADE_STORAGE_PER_LEVEL_COST
+func _storage_upgrade_cost(storage) -> float:
+	if storage == null or not is_instance_valid(storage):
+		return GameConfig.UPGRADE_STORAGE_BASE_COST
+	var level = storage.get_upgrade_level() if storage.has_method("get_upgrade_level") else 0
+	return GameConfig.UPGRADE_STORAGE_BASE_COST + level * GameConfig.UPGRADE_STORAGE_PER_LEVEL_COST
 
-func _cat_home_upgrade_cost() -> float:
-	return GameConfig.UPGRADE_CAT_HOME_BASE_COST + Global.cat_home_upgrade_level * GameConfig.UPGRADE_CAT_HOME_PER_LEVEL_COST
+func _cat_home_upgrade_cost(home) -> float:
+	if home == null or not is_instance_valid(home):
+		return GameConfig.UPGRADE_CAT_HOME_BASE_COST
+	var level = home.get_upgrade_level() if home.has_method("get_upgrade_level") else 0
+	return GameConfig.UPGRADE_CAT_HOME_BASE_COST + level * GameConfig.UPGRADE_CAT_HOME_PER_LEVEL_COST
 
 func _upgrade_machine():
-	var cost = _machine_upgrade_cost()
+	var machine = _get_selected_item()
+	if machine == null or not is_instance_valid(machine):
+		return
+	var cost = _machine_upgrade_cost(machine)
 	if Global.money < cost:
 		print("[PhoneUI] Upgrade machine failed: not enough money")
 		return
 	Global.add_money(-cost)
-	Global.machine_upgrade_level += 1
-	print("[PhoneUI] Upgrade machine lvl", Global.machine_upgrade_level)
-	for machine in get_tree().get_nodes_in_group("machines"):
-		if machine.has_method("apply_upgrade_level"):
-			machine.apply_upgrade_level(Global.machine_upgrade_level)
+	var level = machine.get_upgrade_level() if machine.has_method("get_upgrade_level") else 0
+	level += 1
+	if machine.has_method("apply_upgrade_level"):
+		machine.apply_upgrade_level(level)
+	print("[PhoneUI] Upgrade machine lvl", level)
 
 func _upgrade_storage():
-	var cost = _storage_upgrade_cost()
+	var storage = _get_selected_item()
+	if storage == null or not is_instance_valid(storage):
+		return
+	var cost = _storage_upgrade_cost(storage)
 	if Global.money < cost:
 		print("[PhoneUI] Upgrade storage failed: not enough money")
 		return
 	Global.add_money(-cost)
-	Global.storage_upgrade_level += 1
-	print("[PhoneUI] Upgrade storage lvl", Global.storage_upgrade_level)
-	for storage in get_tree().get_nodes_in_group("storages"):
-		if storage.has_method("apply_upgrade_level"):
-			storage.apply_upgrade_level(Global.storage_upgrade_level)
+	var level = storage.get_upgrade_level() if storage.has_method("get_upgrade_level") else 0
+	level += 1
+	if storage.has_method("apply_upgrade_level"):
+		storage.apply_upgrade_level(level)
+	print("[PhoneUI] Upgrade storage lvl", level)
 
 func _upgrade_cat_home():
-	var cost = _cat_home_upgrade_cost()
+	var home = _get_selected_item()
+	if home == null or not is_instance_valid(home):
+		return
+	var cost = _cat_home_upgrade_cost(home)
 	if Global.money < cost:
 		print("[PhoneUI] Upgrade cats house failed: not enough money")
 		return
 	Global.add_money(-cost)
-	Global.cat_home_upgrade_level += 1
-	print("[PhoneUI] Upgrade cats house lvl", Global.cat_home_upgrade_level)
-	for home in get_tree().get_nodes_in_group("cat_homes"):
-		if home.has_method("apply_upgrade_level"):
-			home.apply_upgrade_level(Global.cat_home_upgrade_level)
+	var level = home.get_upgrade_level() if home.has_method("get_upgrade_level") else 0
+	level += 1
+	if home.has_method("apply_upgrade_level"):
+		home.apply_upgrade_level(level)
+	print("[PhoneUI] Upgrade cats house lvl", level)
 
 func _fill_machine(machine):
 	if machine == null or not is_instance_valid(machine):
