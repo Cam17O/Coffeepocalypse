@@ -4,7 +4,7 @@ class_name GameConfig
 ## Global defaults
 const GLOBAL_STARTING_MONEY: float = 100.0
 const GLOBAL_STARTING_RAW_COFFEE: int = 0
-const GLOBAL_MAX_COFFEE_CAPACITY: int = 10
+const GLOBAL_MAX_COFFEE_CAPACITY: int = 20
 const GLOBAL_STARTING_SATISFACTION: float = 50.0
 
 ## Cats home tuning
