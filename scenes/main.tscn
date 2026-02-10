@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cviegt5njhfut" path="res://scenes/cats.tscn" id="7_tipki"]
 [ext_resource type="PackedScene" uid="uid://bxhixr1jaxpst" path="res://scenes/phone_ui.tscn" id="9_choun"]
 [ext_resource type="PackedScene" uid="uid://dmol87a0ad8ov" path="res://scenes/progress_bar.tscn" id="10_choun"]
+[ext_resource type="Script" path="res://code/boats/boat_manager.gd" id="11_boatmgr"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_tipki"]
 vertices = PackedVector2Array(28, 170, 138.97656, 173.96875, -156.02344, 172.03125, -30, 170, 26, -74, 103.5, -84, 138.21875, -84, 28, 101, 26, -118, 103.5, -124, -157.96875, -154.42188, -30, 101, 137.39844, -155, 138.00781, -154.28125, 138.10156, -124, -157.29688, -155, -25, -118, -25, -74)
@@ -237,3 +238,6 @@ position = Vector2(124, -48)
 position = Vector2(94, 69)
 
 [node name="PhoneUI" parent="." unique_id=2023842308 instance=ExtResource("9_choun")]
+
+[node name="BoatManager" type="Node" parent="."]
+script = ExtResource("11_boatmgr")

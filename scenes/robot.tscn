@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://robot_placeholder1"]
+
+[ext_resource type="Texture2D" uid="uid://bupkskkc52kpi" path="res://Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="1_robot"]
+[ext_resource type="Script" path="res://code/robots/robot.gd" id="2_robot"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_robot"]
+radius = 12.0
+
+[node name="Robot" type="StaticBody2D" groups=["robots"]]
+input_pickable = true
+script = ExtResource("2_robot")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_robot")
+hframes = 5
+vframes = 2
+frame = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_robot")
+
+[connection signal="input_event" from="." to="." method="_input_event"]

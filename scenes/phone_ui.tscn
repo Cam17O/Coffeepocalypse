@@ -93,6 +93,28 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="BtnBoats" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=452187633]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnTalentTree" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=452187634]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnRobots" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer" unique_id=452187635]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddBoatButton" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=452187636]
+layout_mode = 2
+text = "+ Ajouter boat"
+size_flags_horizontal = 3
+
+[node name="AddRobotButton" type="Button" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=452187637]
+layout_mode = 2
+text = "+ Ajouter robot"
+size_flags_horizontal = 3
+
 [node name="ScrollContainer" type="ScrollContainer" parent="MainControl/PhoneBody/ContentBox/LeftColumn" unique_id=621522784]
 layout_mode = 2
 size_flags_vertical = 3

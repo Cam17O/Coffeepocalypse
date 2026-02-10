@@ -13,6 +13,7 @@ var global_satisfaction: float = GameConfig.GLOBAL_STARTING_SATISFACTION
 var machine_upgrade_level: int = 0
 var storage_upgrade_level: int = 0
 var cat_home_upgrade_level: int = 0
+var unlocked_talents: Array = []
 var save_service: RefCounted
 var upgrade_service: RefCounted
 

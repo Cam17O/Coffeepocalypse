@@ -23,6 +23,10 @@ var speed = GameConfig.CAT_MOVE_SPEED
 var health: int
 var energy: float
 var is_ko: bool = false
+var level: int = 1
+var xp: float = 0.0
+var xp_to_next_level: float = 10.0
+var work_boost: float = 1.0
 var _wander_target: Vector2
 var _waiting_time: float = 0.0
 var _rescore_elapsed: float = 0.0
@@ -139,6 +143,16 @@ func _physics_process(delta):
 					_stop_working()
 					current_state = State.WANDERING
 					_pick_new_wander_target()
+			# Gain XP while working
+			xp += delta * 0.5
+			if xp >= xp_to_next_level:
+				xp = 0.0
+				level += 1
+				xp_to_next_level = 10.0 + level * 5
+				speed += 5
+				max_health += 2
+				health = min(health + 2, max_health)
+				work_boost += 0.1
 
 # Update energy bar position and value
 func _process(_delta):

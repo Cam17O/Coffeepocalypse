@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const GameConfig = preload("res://code/global/GameConfig.gd")
+const GameData = preload("res://code/global/GameData.gd")
 const PhoneUIBuildService = preload("res://code/ui/PhoneUIBuildService.gd")
 const PhoneUIDetailsService = preload("res://code/ui/PhoneUIDetailsService.gd")
 
@@ -16,6 +17,11 @@ const PhoneUIDetailsService = preload("res://code/ui/PhoneUIDetailsService.gd")
 @onready var add_machine_button = $MainControl/PhoneBody/ContentBox/LeftColumn/AddMachineButton
 @onready var add_storage_button = $MainControl/PhoneBody/ContentBox/LeftColumn/AddStorageButton
 @onready var add_cat_home_button = $MainControl/PhoneBody/ContentBox/LeftColumn/AddCatHomeButton
+@onready var add_boat_button = $MainControl/PhoneBody/ContentBox/LeftColumn/AddBoatButton
+@onready var add_robot_button = $MainControl/PhoneBody/ContentBox/LeftColumn/AddRobotButton
+@onready var btn_boats = $MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer/BtnBoats
+@onready var btn_talent_tree = $MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer/BtnTalentTree
+@onready var btn_robots = $MainControl/PhoneBody/ContentBox/LeftColumn/TabsContainer/BtnRobots
 
 @onready var labels = $MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails/Labels
 @onready var add_button = $MainControl/PhoneBody/ContentBox/RightColumn/DetailPanel/VBoxDetails/AddButton
@@ -39,7 +45,7 @@ const BUILD_COST_MACHINE := GameConfig.BUILD_COST_MACHINE
 const BUILD_COST_STORAGE := GameConfig.BUILD_COST_STORAGE
 const BUILD_COST_CAT_HOME := GameConfig.BUILD_COST_CAT_HOME
 
-enum Tab { MACHINES, STORAGES, CAT_HOMES, CATS, PLAYER }
+enum Tab { MACHINES, STORAGES, CAT_HOMES, CATS, PLAYER, BOATS, TALENT_TREE, ROBOTS }
 var current_tab: Tab = Tab.MACHINES
 var current_items: Array = []
 var storage_products := [
@@ -61,9 +67,14 @@ func _ready():
 	btn_spawners.pressed.connect(func(): _set_tab(Tab.CAT_HOMES))
 	btn_cats.pressed.connect(func(): _set_tab(Tab.CATS))
 	btn_player.pressed.connect(func(): _set_tab(Tab.PLAYER))
+	btn_boats.pressed.connect(func(): _set_tab(Tab.BOATS))
+	btn_talent_tree.pressed.connect(func(): _set_tab(Tab.TALENT_TREE))
+	btn_robots.pressed.connect(func(): _set_tab(Tab.ROBOTS))
 	add_machine_button.pressed.connect(func(): _start_build("res://scenes/coffee_machine.tscn", BUILD_COST_MACHINE, "machine"))
 	add_storage_button.pressed.connect(func(): _start_build("res://scenes/stockage.tscn", BUILD_COST_STORAGE, "stockage"))
 	add_cat_home_button.pressed.connect(func(): _start_build("res://scenes/cats_home.tscn", BUILD_COST_CAT_HOME, "cats house"))
+	add_boat_button.pressed.connect(_on_add_boat_pressed)
+	add_robot_button.pressed.connect(_on_add_robot_pressed)
 
 	item_list.item_selected.connect(_on_item_selected)
 	fill_button.pressed.connect(_on_fill_pressed)
@@ -109,6 +120,9 @@ func _setup_labels():
 	btn_spawners.text = "Cats house"
 	btn_cats.text = "Chats"
 	btn_player.text = "Joueur"
+	btn_boats.text = "Boats"
+	btn_talent_tree.text = "Talents"
+	btn_robots.text = "Robots"
 	add_machine_button.text = "+ Ajouter machine (" + str(int(BUILD_COST_MACHINE)) + ")"
 	add_storage_button.text = "+ Ajouter stockage (" + str(int(BUILD_COST_STORAGE)) + ")"
 	add_cat_home_button.text = "+ Ajouter cats house (" + str(int(BUILD_COST_CAT_HOME)) + ")"
@@ -121,7 +135,7 @@ func _setup_labels():
 	buy_raw_button.visible = false
 	products_label.text = "Produits"
 	close_button.text = "Fermer"
-	info_label.text = "P pour ouvrir/fermer"
+	info_label.text = "P ou Tab: telephone | E: deposer cafe (pres machine)"
 
 func _set_tab(tab: Tab):
 	current_tab = tab
@@ -161,6 +175,24 @@ func _refresh_list():
 				item_list.add_item("Cats house " + str(i + 1))
 		Tab.PLAYER:
 			current_items.append(null)
+		Tab.BOATS:
+			var boats = get_tree().get_nodes_in_group("boats")
+			for i in boats.size():
+				var boat = boats[i]
+				current_items.append(boat)
+				item_list.add_item("Boat " + str(i + 1))
+		Tab.TALENT_TREE:
+			for tid in GameData.TALENTS:
+				var t = GameData.TALENTS[tid]
+				var learned = t.unlocks in Global.unlocked_talents
+				item_list.add_item(("[OK] " if learned else "") + t.name + " (" + str(t.cost) + ")")
+				current_items.append({"tid": tid, "talent": t})
+		Tab.ROBOTS:
+			var robots = get_tree().get_nodes_in_group("robots")
+			for i in robots.size():
+				var robot = robots[i]
+				current_items.append(robot)
+				item_list.add_item("Robot " + str(i + 1))
 	if item_list.item_count > 0:
 		item_list.select(0)
 
@@ -168,7 +200,7 @@ func _on_item_selected(index: int):
 	_show_details(index)
 
 func _refresh_selected_details():
-	if current_tab == Tab.PLAYER:
+	if current_tab == Tab.PLAYER or current_tab == Tab.TALENT_TREE:
 		_show_details(0)
 		return
 	if item_list.item_count <= 0:
@@ -188,6 +220,8 @@ func _show_details(index: int):
 			add_machine_button.visible = true
 			add_storage_button.visible = false
 			add_cat_home_button.visible = false
+			add_boat_button.visible = false
+			add_robot_button.visible = false
 			fill_button.visible = true
 			upgrade_button.visible = true
 			alt_button.visible = false
@@ -202,6 +236,8 @@ func _show_details(index: int):
 			add_machine_button.visible = false
 			add_storage_button.visible = true
 			add_cat_home_button.visible = false
+			add_boat_button.visible = false
+			add_robot_button.visible = false
 			fill_button.visible = true
 			upgrade_button.visible = true
 			alt_button.visible = true
@@ -216,6 +252,8 @@ func _show_details(index: int):
 			add_machine_button.visible = false
 			add_storage_button.visible = false
 			add_cat_home_button.visible = false
+			add_boat_button.visible = false
+			add_robot_button.visible = false
 			fill_button.visible = false
 			upgrade_button.visible = false
 			alt_button.visible = false
@@ -227,6 +265,8 @@ func _show_details(index: int):
 			add_machine_button.visible = false
 			add_storage_button.visible = false
 			add_cat_home_button.visible = true
+			add_boat_button.visible = false
+			add_robot_button.visible = false
 			fill_button.visible = false
 			upgrade_button.visible = true
 			alt_button.visible = false
@@ -239,6 +279,55 @@ func _show_details(index: int):
 			add_machine_button.visible = false
 			add_storage_button.visible = false
 			add_cat_home_button.visible = false
+			add_boat_button.visible = false
+			add_robot_button.visible = false
+			fill_button.visible = false
+			upgrade_button.visible = false
+			alt_button.visible = false
+			buy_raw_button.visible = false
+		Tab.BOATS:
+			labels.text = details_service.boat_details(item) if details_service and item else ""
+			add_button.visible = false
+			_set_storage_purchase_visible(false)
+			add_machine_button.visible = false
+			add_storage_button.visible = false
+			add_cat_home_button.visible = false
+			add_boat_button.visible = true
+			add_robot_button.visible = false
+			fill_button.visible = false
+			upgrade_button.visible = false
+			alt_button.visible = false
+			buy_raw_button.visible = false
+		Tab.TALENT_TREE:
+			var talent_data = item
+			labels.text = details_service.talent_tree_details() if details_service else ""
+			add_button.visible = false
+			_set_storage_purchase_visible(false)
+			add_machine_button.visible = false
+			add_storage_button.visible = false
+			add_cat_home_button.visible = false
+			add_boat_button.visible = false
+			add_robot_button.visible = false
+			fill_button.visible = false
+			upgrade_button.visible = true
+			alt_button.visible = false
+			buy_raw_button.visible = false
+			if talent_data and talent_data is Dictionary and talent_data.has("talent"):
+				var t = talent_data.talent
+				var learned = t.unlocks in Global.unlocked_talents
+				upgrade_button.text = "Apprendre (" + str(t.cost) + " sat)" if not learned else "Deja appris"
+				upgrade_button.disabled = learned
+			else:
+				upgrade_button.visible = false
+		Tab.ROBOTS:
+			labels.text = details_service.robot_details(item) if details_service and item else ""
+			add_button.visible = false
+			_set_storage_purchase_visible(false)
+			add_machine_button.visible = false
+			add_storage_button.visible = false
+			add_cat_home_button.visible = false
+			add_boat_button.visible = false
+			add_robot_button.visible = true
 			fill_button.visible = false
 			upgrade_button.visible = false
 			alt_button.visible = false
@@ -265,6 +354,8 @@ func _on_upgrade_pressed():
 			_upgrade_storage()
 		Tab.CAT_HOMES:
 			_upgrade_cat_home()
+		Tab.TALENT_TREE:
+			_learn_talent()
 		_:
 			pass
 	_refresh_selected_details()
@@ -351,6 +442,24 @@ func _upgrade_storage():
 	if storage.has_method("apply_upgrade_level"):
 		storage.apply_upgrade_level(level)
 	print("[PhoneUI] Upgrade storage lvl", level)
+
+func _learn_talent():
+	var item = _get_selected_item()
+	if not item or not item is Dictionary or not item.has("talent"):
+		return
+	var t = item.talent
+	if t.unlocks in Global.unlocked_talents:
+		return
+	if Global.global_satisfaction < t.cost:
+		display_info("Pas assez de satisfaction")
+		return
+	Global.global_satisfaction -= t.cost
+	Global.unlocked_talents.append(t.unlocks)
+	if t.unlocks == "carry_capacity":
+		Global.max_coffee_capacity += 10
+	display_info("Talent appris: " + t.name)
+	_refresh_selected_details()
+	_refresh_list()
 
 func _upgrade_cat_home():
 	var home = _get_selected_item()
@@ -464,6 +573,25 @@ func _buy_selected_product(amount: int):
 func _start_build(scene_path: String, cost: float, label: String):
 	if build_service:
 		build_service.start_build(scene_path, cost, label)
+
+func _on_add_boat_pressed():
+	var cfg = GameData.BOAT_TYPES.get("boat_placeholder_1", {})
+	var bid = "boat_placeholder_1"
+	for b in GameData.BOAT_TYPES:
+		if b in Global.unlocked_talents:
+			bid = b
+			break
+	cfg = GameData.BOAT_TYPES.get(bid, cfg)
+	var cost = cfg.get("build_cost", 100) + cfg.get("base_storage", 20) * GameData.RAW_COFFEE_UNIT_PRICE
+	_start_build("res://scenes/boat.tscn", cost, "boat")
+
+func _on_add_robot_pressed():
+	for rid in GameData.ROBOT_TYPES:
+		if rid in Global.unlocked_talents:
+			var cost = GameData.ROBOT_TYPES[rid].build_cost
+			_start_build("res://scenes/robot.tscn", cost, "robot")
+			return
+	display_info("Débloquez un robot dans l'arbre des talents")
 
 func _on_close_pressed():
 	_toggle_visibility()

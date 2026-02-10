@@ -2,74 +2,156 @@
 
 ## Technique
 
-    - godot
-    - 2d
-    - enregistrement local avec possibilité d'import / export
-    - 
+- Godot — code fait avec assistance IA
+- 2D — sprites faits main
+- ui professionel belle et propre
+- Enregistrement local avec possibilité d'import / export
 
-## type de jeu
+## Type de jeu
 
-    - incrémentale
-    - un peu d'iddle
+- Incrémentale
+- Simulation
+- Un peu d'idle
 
-## fontionalité
+## Fonctionnalités
 
-### ile déserte (pas de lore pour l'instant)
+### Île déserte (pas de lore pour l'instant)
 
-### machine à café un peu pourris :
+- Bateau vient de hors de l'île pour amener les ressources premières
 
-    - mauvais gout
-    - ne marche pas tout le temps
-    - parfois prend l'argent mais ne fait pas le café
-    - lent
-    - faible capacité de réserve de café
-    - café ne donne pas beaucoup d'énergie au buveur
-    - café donne de l'énergie pendant pas très longtemps au buveur
-    - un seul choix du café
+### Machine à café
 
-### zone d'arrivage des matiéres premiére
+x = 5 (à équilibrer)
 
-    - limite de stockage
-    - lente arrivé des matiére premiére
+- 1 machine à café de type 1 au début de la partie
+- Possibilité de poser plusieurs machines du même type (chacune à son propre niveau) (prix augmente à chaque élément du même type posé)
+- Débloquer un nouveau type de machine via l'arbre de compétence : plus chère mais meilleures stats dès le level 1 (sprites différents)
+- Chaque machine a un état de propreté : descend régulièrement (impacte la satisfaction gagnée par café vendu ; si en dessous d'un seuil, ajoute une valeur négative)
+- Chaque machine a un état de durabilité (genre neuf, abîmée, cassée) : descend à chaque café à partir d'un seuil, possibilité d'avoir des problèmes à chaque café :
+  - Prend l'argent mais ne donne pas de café ⇒ client obligé de payer 2, 3 fois max (impacte la satisfaction beaucoup si plusieurs fois pas de café à la suite) — UI à afficher quand très bas
+  - Eau sans ou avec peu de café (réduit la satisfaction) (si que eau, chance que le chat rachète un café ; si que eau une seconde fois, réduit satisfaction++) — UI à afficher quand très bas
+- Améliorations de niveau (chaque amélioration d'un élément plus chère que la précédente, niveau indépendant pour chaque élément) :
+  - Plus rapide à faire du café (augmente gain de satisfaction par café vendu)
+  - Stock de matière première max augmenté (+5 tous les x niveaux et pas à chaque niveau) — UI à afficher quand très bas
+  - Meilleur ratio (nombre de matière première ⇒ nombre de cafés faits avec) (ne se passe que tous les x niveaux et pas à chaque niveau)
+  - Prix du café augmenté
+  - Meilleur goût (ne se passe que tous les x niveaux et pas à chaque niveau) (augmente gain de satisfaction par café vendu)
+  - Meilleure durabilité max (ne se passe que tous les x niveaux et pas à chaque niveau)
+  - Meilleur taux de descente de durabilité
+  - Meilleure propreté max (ne se passe que tous les x niveaux et pas à chaque niveau)
+  - Meilleur taux de descente de propreté
+- Actions :
+  - Clic droit sur élément : ouvrir le menu à l'onglet correspondant
+  - Clic gauche : prendre un café (le joueur prend juste un café (doit bloquer mouvement (immobiliser)), pas de bonus ou quoi que ce soit)
+  - E : ouvre petite popup : X1 dépose un café brut dans la machine, X10 dépose 10 cafés bruts dans la machine, MAX dépose tout le café présent dans l'inventaire ou max du storage de la machine
 
-### clients chats :
+### Zone d'arrivage des matières premières
 
-    - niveau de satisfaction
-        - le niveau de satisfaction joue sur le nombre de chat qui achéte
-        - si le niveau de satisfaction est bas alors chaque problème (mauvais gout, vide,...) à plus d'impacte que normalement sur le niveau de satisfaction
+- 1 storage de type 1 au début de la partie
+- Possibilité de remplacer le storage par un de type supérieur, exemple : pile of box, building, giga storage, dimension portal storage, black hole. Ça augmente beaucoup le storage (sprites différents)
+- Amélioration (reset niveau à 1 quand nouveau type de storage) :
+  - Plus de stockage max — UI à afficher quand très bas
+  - Vitesse de déchargement des bateaux augmentée
+- Évolution :
+  - Remplacer (sprites différents) (reset niveau à 1 quand nouveau type de storage) (besoin de l'avoir débloqué dans l'arbre de compétence)
+- Actions :
+  - Clic droit sur élément : ouvrir le menu à l'onglet correspondant
+  - Clic gauche : prendre du café : remplit l'inventaire du joueur au max
 
-    - chat spécial
-        - les chats spéciaux sont rares et impacte plus le niveau de  satisfaction que ce soit en bien ou mauvais
-    
+### Boats
 
-### Joueur :
+- Arrive de loin dans l'océan (environ 1 min de trajet au niveau 1), quand il part pour venir à l'île il doit dépenser l'argent équivalent au prix des matières premières qu'il transporte
+- Stockage max
+- Vitesse
+- Une fois arrivé au storage, dépose tout dedans :
+  - Si storage plein : attendre que le storage se vide, le remplir ainsi de suite jusqu'à ce que le bateau soit vide
+- Amélioration :
+  - Plus de stockage max
+  - Vitesse de déplacement
+- Évolution :
+  - Remplacer (sprites différents) (reset niveau à 1 quand nouveau type de boat) (besoin de l'avoir débloqué dans l'arbre de compétence)
+- Actions :
+  - Clic droit sur élément : ouvrir le menu à l'onglet correspondant
 
-    - mouvement
-    - pêche comme moyen iddle de gagner de l'argent (booster en prenant les produits des différentes machines)
-    - taper un chat (satisfaction baisse beaucou^p), une fois KO peut le forcer à acheter un truc
-    - consommer le produit d'une machine (donne des bonnus ou malus en fonction du produit)
-    - téléphone : 
-        - achat et placement d'une nouvelle machine
-        - amélioré une machine, la zone de stockage
-        - améliorer canne à pêche
-        - achat de matiére premiére nécessaire au machine
-        - achat de robot pour automiser la partie commande, remplissage
+### Clients chats
 
-### Idée late/end game
+- Chat spawn dans maison de chat
+- Barre de vie
+- Level (chaque chat a un level individuel) — UI pour afficher brièvement level up
+- Boost lieu de travail
+- A une barre d'énergie : — UI pour afficher énergie
+  - Pleine : va travailler
+  - Vide : va chercher du café
+- Améliorations (gagnent de l'exp en travaillant) :
+  - Vitesse plus rapide
+  - Meilleur boost de travail (ne se passe que tous les x niveaux et pas à chaque niveau)
+  - Plus de PV
 
-    - grêve des robots => plus de café => chats acro pas content => guerre robot, joueur vs chat
-    - ferme : production des ressource premiére / voir exlusive directement sur l'île 
-    - invasion du monde hors de l'ile (carte du monde, chaque pays à des préférences ce qui force les joueur à développer leur ferme )
+### Talent tree
 
+Arbre des talents qui permet de débloquer de nouvelles fonctionnalités au prix de satisfaction
 
-### systeme de prestige
+- Débloquer robot :
+  - Storage : transporte des matières premières du storage à la machine la plus vide automatiquement
+  - Cleaner : clean les machines (remet à propre)
+  - Réparateur : répare les machines (remet à neuf)
+- Débloquer nouveau type de :
+  - Machines
+  - Cat's house
+  - Storage
+- Améliorer le joueur :
+  - Quantité transportable
+- Storage :
+  - Auto restock
 
-    - reset de l'île :
+### Robot
 
-    - bonus permanent :
-        - stat basique des machine et de la zone de stockage
-        - reset avec plus de robot/machine dès le début
-        - agrandissement / autre bonus pour les barres de satisfaction
-        - 
+- Storage : transporte des matières premières du storage à la machine la plus vide automatiquement
+- Cleaner : clean la machine (remet à propre) la plus sale
+- Réparateur : répare la machine (remet à neuf) la plus abîmée
 
-Souhaites-tu que j'ajoute un système visuel (comme une petite étiquette ou un changement de couleur) sur la machine dans le jeu pour qu'on voie son niveau sans ouvrir le téléphone ?
+### Joueur
+
+- Mouvement : Z, Q, S, D
+- Consommer le produit d'une machine (plus tard, pas faire mtn) (boost certaines stats du joueur)
+- Téléphone (menu Tab) :
+  - Menu (player, cats, machines, cat's house, storage, boats, talent tree, robot)
+  - **Player :**
+    - Image du player + afficher plein d'infos sur le player
+  - **Cats :**
+    - Tableau triable avec les infos les plus importantes (une ligne un chat)
+    - Clic sur ligne du tableau ⇒ popup : image + toutes les infos du chat + à gauche et à droite flèche pour passer au chat d'avant ou d'après
+  - **Machines :**
+    - Bouton ajouter machine : ouvre popup avec liste des machines (image bloquée pour celles pas encore débloquées) image, nom et description de chaque machine : au clic sur élément de la liste construire (si autorisé) une nouvelle machine
+    - Tableau triable avec les infos les plus importantes (une ligne une machine) + au-dessus le bouton ajouter machine
+    - Clic sur ligne du tableau ⇒ popup : image + toutes les infos de la machine + à gauche et à droite flèche pour passer à la machine d'avant ou d'après, bouton améliorer machine
+  - **Cat's house :**
+    - Bouton ajouter cat house : ouvre popup avec liste des cat house (image bloquée pour celles pas encore débloquées) image, nom et description de chaque cat house : au clic sur élément de la liste construire (si autorisé) une nouvelle cat house
+    - Tableau triable avec les infos les plus importantes (une ligne une cat house)
+    - Clic sur ligne du tableau ⇒ popup : image + toutes les infos de la cat house + à gauche et à droite flèche pour passer à la cat house d'avant ou d'après, bouton améliorer cat house
+  - **Storage :**
+    - Image du storage + afficher plein d'infos sur le storage
+    - Bouton auto restock :
+      - Si oui : demande choix des bateaux utilisés et les commandes en boucle jusqu'à fin auto restock
+      - Si non : demande choix du bateau, demande quantité de stock et bouton commander
+    - Liste des commandes en cours
+    - Bouton améliorer
+    - Bouton évoluer : fait passer à la sprite du storage supérieur
+  - **Boats :**
+    - Bouton ajouter boat : ouvre popup avec liste des boats (image bloquée pour celles pas encore débloquées) image, nom et description de chaque boat : au clic sur élément de la liste ajouter (si autorisé) un nouveau boat
+    - Tableau triable avec les infos les plus importantes (une ligne un boat)
+    - Clic sur ligne du tableau ⇒ popup : image + toutes les infos du boat + à gauche et à droite flèche pour passer au boat d'avant ou d'après, bouton améliorer boat, bouton évoluer boat
+  - **Talent tree :**
+    - Arbre des talents :
+      - Clic sur un talent ⇒ popup : image, nom, description, bouton apprendre
+  - **Robot :**
+    - Bouton ajouter robot : ouvre popup avec liste des robots (image bloquée pour celles pas encore débloquées) image, nom et description de chaque robot : au clic sur élément de la liste ajouter (si autorisé) un nouveau robot
+    - Tableau triable avec les infos les plus importantes (une ligne un robot)
+    - Clic sur ligne du tableau ⇒ popup : image + toutes les infos du robot + à gauche et à droite flèche pour passer au robot d'avant ou d'après, bouton améliorer robot
+
+### Idées
+
+- Ferme : production des ressources premières / voir exclusives directement sur l'île
+- Pêche :
+  - Trouver des équipements équipables aux chats ou aux machines…
+- systeme de prestige

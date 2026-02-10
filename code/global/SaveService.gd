@@ -28,7 +28,8 @@ func _collect_data() -> Dictionary:
 		"global_satisfaction": _global.global_satisfaction,
 		"machine_upgrade_level": _global.machine_upgrade_level,
 		"storage_upgrade_level": _global.storage_upgrade_level,
-		"cat_home_upgrade_level": _global.cat_home_upgrade_level
+		"cat_home_upgrade_level": _global.cat_home_upgrade_level,
+		"unlocked_talents": _global.unlocked_talents
 	}
 
 func _write_save_file(path: String, data: Dictionary):
@@ -56,4 +57,5 @@ func _apply_data(parsed: Dictionary):
 	_global.machine_upgrade_level = parsed.get("machine_upgrade_level", _global.machine_upgrade_level)
 	_global.storage_upgrade_level = parsed.get("storage_upgrade_level", _global.storage_upgrade_level)
 	_global.cat_home_upgrade_level = parsed.get("cat_home_upgrade_level", _global.cat_home_upgrade_level)
+	_global.unlocked_talents = parsed.get("unlocked_talents", _global.unlocked_talents)
 	_global.queue_apply_upgrades()

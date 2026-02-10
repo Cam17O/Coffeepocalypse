@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://boat_placeholder1"]
+
+[ext_resource type="Texture2D" uid="uid://bupkskkc52kpi" path="res://Sprout Lands - Sprites - Basic pack/Objects/Chest.png" id="1_boat"]
+[ext_resource type="Script" path="res://code/boats/boat.gd" id="2_boat"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_boat"]
+radius = 15.0
+
+[node name="Boat" type="StaticBody2D" groups=["boats"]]
+input_pickable = true
+script = ExtResource("2_boat")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_boat")
+hframes = 5
+vframes = 2
+frame = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_boat")
+
+[connection signal="input_event" from="." to="." method="_input_event"]

@@ -1,5 +1,7 @@
 extends RefCounted
 
+const GameData = preload("res://code/global/GameData.gd")
+
 var _ui: CanvasLayer
 
 func _init(ui: CanvasLayer):
@@ -20,6 +22,10 @@ func machine_details(machine) -> String:
 	lines.append("Prend argent si echec: " + str(int(machine.take_money_on_fail_chance * 100.0)) + "%")
 	lines.append("Prix cafe: " + str(snapped(machine.coffee_price, 0.1)))
 	lines.append("Satisfaction (+/-): " + str(snapped(machine.satisfaction_reward, 0.1)) + " / " + str(snapped(machine.satisfaction_penalty, 0.1)))
+	if machine.get("cleanliness") != null:
+		lines.append("Proprete: " + str(int(machine.cleanliness)) + " / " + str(int(machine.cleanliness_max)))
+	if machine.get("durability") != null:
+		lines.append("Durabilite: " + str(int(machine.durability)) + " / " + str(int(machine.durability_max)))
 	if machine.has_method("get_worker_count"):
 		lines.append("Workers: " + str(machine.get_worker_count()) + " / " + str(machine.max_workers))
 	var success_rate = max(0.0, 1.0 - machine.fail_chance)
@@ -64,6 +70,8 @@ func cat_details(cat) -> String:
 	var max_energy = cat.get("max_energy")
 	var lines = []
 	lines.append("[b]Chat[/b]")
+	lines.append("Niveau: " + str(cat.get("level", 1)))
+	lines.append("XP: " + str(snapped(cat.get("xp", 0), 1)) + " / " + str(cat.get("xp_to_next_level", 10)))
 	lines.append("Special: " + str(is_special))
 	lines.append("Vie: " + str(health))
 	lines.append("Energie: " + str(int(energy)) + " / " + str(int(max_energy)))
@@ -141,4 +149,36 @@ func player_details() -> String:
 	lines.append("[b]Joueur[/b]")
 	lines.append("Argent: " + str(snapped(Global.money, 0.1)))
 	lines.append("Cafe brut sac: " + str(Global.raw_coffee_carried) + " / " + str(Global.max_coffee_capacity))
+	lines.append("")
+	lines.append("[b]Système de prestige (placeholder)[/b]")
+	lines.append("- Reset de l'île")
+	lines.append("- Bonus permanent: stats machines, robots, barres satisfaction")
+	return "\n".join(lines)
+
+func boat_details(boat) -> String:
+	if boat == null or not is_instance_valid(boat):
+		return "Boat manquant"
+	var lines = []
+	lines.append("[b]Boat[/b]")
+	lines.append("Cargo: " + str(boat.current_cargo) + " / " + str(boat.storage_max))
+	lines.append("En voyage: " + str(boat.is_traveling_to_island))
+	lines.append("Au storage: " + str(boat.is_at_storage))
+	return "\n".join(lines)
+
+func talent_tree_details() -> String:
+	var lines = []
+	lines.append("[b]Arbre des talents[/b]")
+	lines.append("Satisfaction: " + str(int(Global.global_satisfaction)))
+	for tid in GameData.TALENTS:
+		var t = GameData.TALENTS[tid]
+		var learned = t.unlocks in Global.unlocked_talents
+		lines.append(("- " if learned else "+ ") + t.name + " (" + str(t.cost) + " sat)" + (" [OK]" if learned else ""))
+	return "\n".join(lines)
+
+func robot_details(robot) -> String:
+	if robot == null or not is_instance_valid(robot):
+		return "Robot manquant"
+	var lines = []
+	lines.append("[b]Robot[/b]")
+	lines.append("Type: " + str(robot.get("robot_type_id", "?")))
 	return "\n".join(lines)

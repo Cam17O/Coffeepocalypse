@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://bqx8depositpopup"]
+
+[ext_resource type="Script" path="res://code/ui/deposit_popup.gd" id="1_deposit"]
+
+[node name="DepositPopup" type="PopupPanel"]
+custom_minimum_size = Vector2(200, 120)
+script = ExtResource("1_deposit")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Déposer café brut:"
+
+[node name="Buttons" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="X1Button" type="Button" parent="VBox/Buttons"]
+layout_mode = 2
+text = "X1"
+
+[node name="X10Button" type="Button" parent="VBox/Buttons"]
+layout_mode = 2
+text = "X10"
+
+[node name="MaxButton" type="Button" parent="VBox/Buttons"]
+layout_mode = 2
+text = "MAX"
+
+[node name="CancelButton" type="Button" parent="VBox"]
+layout_mode = 2
+text = "Annuler"

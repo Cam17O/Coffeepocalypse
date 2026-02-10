@@ -119,3 +119,27 @@ func _input_event(_viewport, event, _shape_idx):
 			var ui = get_tree().get_first_node_in_group("phone_ui")
 			if ui and ui.has_method("open_tab"):
 				ui.open_tab(ui.Tab.STORAGES, self)
+		# Left-click: prendre du café (remplit inventaire joueur au max)
+		elif event.button_index == MOUSE_BUTTON_LEFT and is_player_nearby:
+			_take_coffee_for_player()
+
+func _on_interaction_area_body_entered(body):
+	if body.is_in_group("player"):
+		is_player_nearby = true
+	if body.has_method("entrer_dans_zone_storage"):
+		body.entrer_dans_zone_storage(self)
+
+func _on_interaction_area_body_exited(body):
+	if body.is_in_group("player"):
+		is_player_nearby = false
+	if body.has_method("sortir_depuis_zone_storage"):
+		body.sortir_depuis_zone_storage(self)
+
+func _take_coffee_for_player():
+	if coffee_inventory <= 0 or Global.raw_coffee_carried >= Global.max_coffee_capacity:
+		return
+	var space = Global.max_coffee_capacity - Global.raw_coffee_carried
+	var amount = min(space, coffee_inventory)
+	coffee_inventory -= amount
+	Global.raw_coffee_carried += amount
+	print("[Storage] Player took ", amount, " coffee, inv: ", Global.raw_coffee_carried)
