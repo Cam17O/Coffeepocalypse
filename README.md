@@ -3,9 +3,16 @@
 ## Technique
 
 - Godot — code fait avec assistance IA
-- 2D — sprites faits main
+- 2D — sprites faits main (16*16 pixel)
 - ui professionel belle et propre
 - Enregistrement local avec possibilité d'import / export
+
+
+- si possible, cohérent et optimisé  :
+  - classe, instance de classe, héritage, ect pour chaque élément
+  - sorte d'api pour gérer chaque event (bateau spawn, decharge, chat commence à travailler, boit, fini de boire, se balade)
+  - code compartimentiser pour un machimum de faciliter de compréhension (ex : mouvement, action, amélioration, placement, gestion café chacun dans un fichier différent pour la machine à café)
+
 
 ## Type de jeu
 
@@ -90,6 +97,11 @@ x = 5 (à équilibrer)
 ### Talent tree
 
 Arbre des talents qui permet de débloquer de nouvelles fonctionnalités au prix de satisfaction
+
+- ui - un cercle pour chaque catégorie (image) :
+  - cercle plus petit relié au grand cercle (catégorie) ou au petit cercle de préréquis par un trait (images) : 
+    - click => aprendre la compétence
+    - hover => afficher détail de la compétence survolé
 
 - Débloquer robot :
   - Storage : transporte des matières premières du storage à la machine la plus vide automatiquement
