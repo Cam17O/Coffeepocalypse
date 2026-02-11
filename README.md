@@ -114,8 +114,8 @@ Arbre des talents qui permet de débloquer de nouvelles fonctionnalités au prix
 
 - Mouvement : Z, Q, S, D
 - Consommer le produit d'une machine (plus tard, pas faire mtn) (boost certaines stats du joueur)
-- Téléphone (menu Tab) :
-  - Menu (player, cats, machines, cat's house, storage, boats, talent tree, robot)
+- Téléphone (menu Tab)(grande dialog qui prend 99% de l'écran) :
+  - Menu (player, cats, machines, cat's house, storage, boats, talent tree, robot) (menu vertical à gauche, tout le reste s'affiche à droite du menu)
   - **Player :**
     - Image du player + afficher plein d'infos sur le player
   - **Cats :**
